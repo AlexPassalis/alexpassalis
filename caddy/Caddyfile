@@ -2,3 +2,7 @@ alexpassalis.com {
     root * /usr/share/caddy
     file_server  
 }
+
+49.12.215.125:80 www.alexpassalis.com {
+    redir https://alexpassalis.com{uri}
+}
