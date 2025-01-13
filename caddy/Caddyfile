@@ -1,6 +1,5 @@
 alexpassalis.com {
-    root * ./../next.js/index.html
-    file_server
+    reverse_proxy nextjs:3000
 }
 
 49.12.215.125:80 www.alexpassalis.com {
