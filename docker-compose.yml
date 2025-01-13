@@ -25,7 +25,7 @@ services:
   # Next.js Application
   nextjs:
     build:
-      context: ./ # Path to your Dockerfile
+      context: ./next.js # Path to your Dockerfile
       dockerfile: Dockerfile
     container_name: nextjs
     restart: always
