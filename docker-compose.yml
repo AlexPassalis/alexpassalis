@@ -12,23 +12,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Adminer for Database Management
-  adminer:
-    image: adminer:latest
-    container_name: adminer
-    restart: always
-    ports:
-      - '8080:8080'
-
   # Next.js Application
   nextjs:
     build:
       context: ./next.js # Path to your Dockerfile
       dockerfile: Dockerfile
-    container_name: nextjs
+    container_name: next.js
     restart: always
-    ports:
-      - '3000:3000'
     environment:
       NODE_ENV: production
       PORT: 3000
@@ -44,7 +34,6 @@ services:
     ports:
       - '80:80'
       - '443:443'
-      - "443:443/udp"
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
