@@ -1,6 +1,6 @@
 services:
   postgresql:
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres
     restart: always
     shm_size: 128mb
@@ -11,22 +11,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  nextjs:
+  next-js:
     build:
-      context: ./next.js  # Path where your Next.js Dockerfile is located
+      context: ./next-js
       dockerfile: Dockerfile
-    container_name: nextjs
+    container_name: next-js
     restart: always
     environment:
       NODE_ENV: production
       PORT: 3000
-      # Make sure this references the correct DB service name:
       DATABASE_URL: postgres://example:example@postgresql:5432/exampledb
     depends_on:
       - postgresql
 
   caddy:
-    image: caddy:latest
+    image: caddy:2.6.4
     container_name: caddy
     restart: always
     ports:
@@ -37,7 +36,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - nextjs
+      - next-js
 
 volumes:
   postgres_data:
