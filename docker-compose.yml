@@ -1,6 +1,5 @@
 services:
-  # PostgreSQL Database
-  db:
+  postgresql:
     image: postgres:latest
     container_name: postgres
     restart: always
@@ -12,28 +11,27 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Next.js Application
   nextjs:
     build:
-      context: ./next.js # Path to your Dockerfile
+      context: ./next.js  # Path where your Next.js Dockerfile is located
       dockerfile: Dockerfile
-    container_name: next.js
+    container_name: nextjs
     restart: always
     environment:
       NODE_ENV: production
       PORT: 3000
-      DATABASE_URL: postgres://example:example@db:5432/exampledb
+      # Make sure this references the correct DB service name:
+      DATABASE_URL: postgres://example:example@postgresql:5432/exampledb
     depends_on:
-      - db
+      - postgresql
 
-  # Caddy Reverse Proxy
   caddy:
     image: caddy:latest
     container_name: caddy
     restart: always
     ports:
-      - '80:80'
-      - '443:443'
+      - "80:80"
+      - "443:443"
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
