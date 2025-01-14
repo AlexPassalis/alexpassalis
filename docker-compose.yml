@@ -1,7 +1,7 @@
 services:
   postgresql:
     image: postgres:17
-    container_name: postgres
+    container_name: postgresql
     restart: always
     shm_size: 128mb
     environment:
@@ -10,11 +10,11 @@ services:
       POSTGRES_DB: exampledb
       PORT: 5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgresql_data:/var/lib/postgresql/data
 
   next-js:
     build:
-      context: ./next-js
+      context: ./front-end/next-js
       dockerfile: Dockerfile
     container_name: next-js
     restart: always
@@ -30,8 +30,8 @@ services:
     container_name: caddy
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
@@ -40,6 +40,6 @@ services:
       - next-js
 
 volumes:
-  postgres_data:
+  postgresql_data:
   caddy_data:
   caddy_config:
