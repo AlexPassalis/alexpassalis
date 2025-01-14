@@ -1,5 +1,5 @@
 alexpassalis.com {
-    reverse_proxy nextjs:3000
+    reverse_proxy next-js:3000
 }
 
 49.12.215.125:80 www.alexpassalis.com {
