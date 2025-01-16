@@ -1,5 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
+# Base image
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed
@@ -9,58 +10,83 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+COPY package.json package-lock.json ./
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
+  if [ -f package-lock.json ]; then npm ci; \
+  else echo "package-lock.json not found. Please ensure dependencies are locked." && exit 1; \
   fi
 
 
-# Rebuild the source code only when needed
-FROM base AS builder
+
+
+
+
+
+
+
+
+# Development stage
+FROM base AS development
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY . ./
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
 
+# Use development server
+CMD ["npm", "run", "dev"]
+
+
+
+
+
+
+
+
+
+
+# Production stage
+FROM base AS production
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . ./
+
+# Build the Next.js application
 RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
+  if [ -f package-lock.json ]; then npm run build; \
+  else echo "package-lock.json not found. Please ensure dependencies are locked." && exit 1; \
   fi
 
-# Production image, copy all the files and run next
+
+
+
+
+
+
+
+
+
+# Runner stage for production
 FROM base AS runner
 WORKDIR /app
 
+# Set environment for production
 ENV NODE_ENV=production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
+# Add non-root user for security
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Copy the built application from the production stage
+COPY --from=production /app/public ./public
+COPY --from=production /app/.next/standalone ./
+COPY --from=production /app/.next/static ./.next/static
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
+# Set ownership for the non-root user
 USER nextjs
 
-EXPOSE 3000
-
-ENV PORT=3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
-ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]

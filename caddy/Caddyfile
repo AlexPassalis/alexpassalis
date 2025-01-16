@@ -1,7 +1,0 @@
-alexpassalis.com {
-	reverse_proxy next-js:3000
-}
-
-http://49.12.215.125, http://www.alexpassalis.com {
-	redir https://alexpassalis.com{uri}
-}
