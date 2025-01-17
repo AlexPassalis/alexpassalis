@@ -1,9 +1,5 @@
 services:
   next-js-1:
-    build:
-      context: ./front-end/next-js
-      dockerfile: Dockerfile
-      target: runner
     image: next-js-image
     container_name: next-js-1-container
     environment:
