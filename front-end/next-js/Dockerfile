@@ -1,5 +1,3 @@
-# syntax=docker.io/docker/dockerfile:1
-
 # Base image
 FROM node:18-alpine AS base
 

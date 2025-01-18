@@ -35,6 +35,7 @@ services:
     build:
       context: ./web-server
       dockerfile: Dockerfile
+      target: production
     image: image-nginx
     container_name: container-nginx
     ports:

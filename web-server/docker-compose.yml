@@ -1,9 +1,0 @@
-services:
-  web-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '443:443'
-    restart: always
-    container_name: nginx-container
