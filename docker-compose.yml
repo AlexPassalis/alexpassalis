@@ -1,6 +1,6 @@
 networks:
-  app-network: network-alexpassalis_com
-  driver: bridge
+  network-alexpassalis_com:
+    driver: bridge
 
 services:
   next-js-1:
@@ -9,7 +9,7 @@ services:
     environment:
       - PORT=3001
     networks:
-      - app-network
+      - network-alexpassalis_com
     restart: always
 
   next-js-2:
@@ -18,7 +18,7 @@ services:
     environment:
       - PORT=3002
     networks:
-      - app-network
+      - network-alexpassalis_com
     restart: always
 
   next-js-3:
@@ -27,7 +27,7 @@ services:
     environment:
       - PORT=3003
     networks:
-      - app-network
+      - network-alexpassalis_com
     restart: always
 
   nginx:
@@ -39,7 +39,7 @@ services:
     ports:
       - '443:443'
     networks:
-      - app-network
+      - network-alexpassalis_com
     depends_on:
       - next-js-1
       - next-js-2
