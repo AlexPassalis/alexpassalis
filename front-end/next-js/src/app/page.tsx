@@ -13,12 +13,13 @@ export default function HomePage() {
           const res = await fetch('/api/email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(email),
+            body: JSON.stringify({ email }),
           })
           if (!res.ok) {
             throw new Error('!ok')
           }
-          console.log('success')
+          const { response }: ResponseBody = await res.json()
+          console.log(response)
         } catch (error) {
           console.log(error)
         }
@@ -37,4 +38,8 @@ export default function HomePage() {
       </button>
     </form>
   )
+}
+
+type ResponseBody = {
+  response: string
 }
