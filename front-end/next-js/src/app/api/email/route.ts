@@ -8,5 +8,5 @@ export async function POST(req: Request) {
   const { email }: RequestBody = await req.json()
   console.log(email)
 
-  return NextResponse.json({ json: { response: email } }, { status: 200 })
+  return NextResponse.json({ response: email }, { status: 200 })
 }

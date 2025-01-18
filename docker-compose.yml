@@ -1,5 +1,6 @@
 networks:
-  network-alexpassalis_com:
+  app-network:
+    name: network-alexpassalis_com
     driver: bridge
 
 services:
