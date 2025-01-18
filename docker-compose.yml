@@ -10,7 +10,7 @@ services:
     environment:
       - PORT=3001
     networks:
-      - network-alexpassalis_com
+      - app-network
     restart: always
 
   next-js-2:
@@ -19,7 +19,7 @@ services:
     environment:
       - PORT=3002
     networks:
-      - network-alexpassalis_com
+      - app-network
     restart: always
 
   next-js-3:
@@ -28,7 +28,7 @@ services:
     environment:
       - PORT=3003
     networks:
-      - network-alexpassalis_com
+      - app-network
     restart: always
 
   nginx:
@@ -40,7 +40,7 @@ services:
     ports:
       - '443:443'
     networks:
-      - network-alexpassalis_com
+      - app-network
     depends_on:
       - next-js-1
       - next-js-2
