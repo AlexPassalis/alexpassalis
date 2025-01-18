@@ -9,6 +9,8 @@ export default function HomePage() {
         const formData = new FormData(e.currentTarget)
         const email = formData.get('email') as string
 
+        console.log(process.env.NEXT_PUBLIC_BASE_URL)
+
         try {
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/email`,

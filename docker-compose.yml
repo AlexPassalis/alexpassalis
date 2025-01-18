@@ -1,11 +1,15 @@
+networks:
+  app-network: network-alexpassalis_com
+  driver: bridge
+
 services:
   next-js-1:
     image: image-next-js
     container_name: container-next-js-1
     environment:
       - PORT=3001
-    expose:
-      - '3001'
+    networks:
+      - app-network
     restart: always
 
   next-js-2:
@@ -13,8 +17,8 @@ services:
     container_name: container-next-js-2
     environment:
       - PORT=3002
-    expose:
-      - '3002'
+    networks:
+      - app-network
     restart: always
 
   next-js-3:
@@ -22,8 +26,8 @@ services:
     container_name: container-next-js-3
     environment:
       - PORT=3003
-    expose:
-      - '3003'
+    networks:
+      - app-network
     restart: always
 
   nginx:
@@ -34,8 +38,10 @@ services:
     container_name: container-nginx
     ports:
       - '443:443'
-    restart: always
+    networks:
+      - app-network
     depends_on:
       - next-js-1
       - next-js-2
       - next-js-3
+    restart: always
