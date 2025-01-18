@@ -10,11 +10,14 @@ export default function HomePage() {
         const email = formData.get('email') as string
 
         try {
-          const res = await fetch('http://localhost:3000/api/email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(email),
-          })
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/email`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(email),
+            }
+          )
           if (!res.ok) {
             throw new Error('!ok')
           }
