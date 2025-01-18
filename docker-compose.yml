@@ -1,7 +1,7 @@
 services:
   next-js-1:
-    image: next-js-image
-    container_name: next-js-1-container
+    image: image-next-js
+    container_name: container-next-js-1
     environment:
       - PORT=3001
     expose:
@@ -9,8 +9,8 @@ services:
     restart: always
 
   next-js-2:
-    image: next-js-image
-    container_name: next-js-2-container
+    image: image-next-js
+    container_name: container-next-js-2
     environment:
       - PORT=3002
     expose:
@@ -18,8 +18,8 @@ services:
     restart: always
 
   next-js-3:
-    image: next-js-image
-    container_name: next-js-3-container
+    image: image-next-js
+    container_name: container-next-js-3
     environment:
       - PORT=3003
     expose:
@@ -30,8 +30,8 @@ services:
     build:
       context: ./web-server
       dockerfile: Dockerfile
-    image: nginx-image
-    container_name: nginx-container
+    image: image-nginx
+    container_name: container-nginx
     ports:
       - '443:443'
       - '80:80'
