@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <>
       <form
-        className="flex flex-col gap-2 w-96 place-self-center mt-96"
+        className="flex flex-col w-60 place-self-center mt-96 border border-black p-3"
         onSubmit={async e => {
           e.preventDefault()
           const formData = new FormData(e.currentTarget)
@@ -39,14 +39,17 @@ export default function HomePage() {
         <input
           name="email"
           type="email"
-          className="border border-black text-center"
+          className="border border-black place-self-center text-center w-52 my-2"
         />
-        <button type="submit" className="border border-black">
+        <button
+          type="submit"
+          className="border border-black place-self-center w-1/2 hover:bg-green-600"
+        >
           submit
         </button>
       </form>
 
-      <h1>{responseEmail}</h1>
+      <h1 className="place-self-center mt-10">{responseEmail}</h1>
     </>
   )
 }
