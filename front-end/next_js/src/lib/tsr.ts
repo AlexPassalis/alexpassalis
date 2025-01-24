@@ -1,5 +1,5 @@
 import { initTsrReactQuery } from '@ts-rest/react-query/v5'
-import contract from '../../../../contract/src/index'
+import contract from '@alexpassalis_com/contracts'
 
 export const tsr = initTsrReactQuery(contract, {
   baseUrl: 'http://localhost:4000',

@@ -1,7 +1,8 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import usersRouter from './routes/users.routes.ts'
-import userRouter from './routes/user.routes.ts'
+
+import usersRouter from './routes/usersRouter.ts'
+import userRouter from './routes/userRouter.ts'
 import s from './routes/index.ts'
 
 const app = Fastify({ logger: true })
