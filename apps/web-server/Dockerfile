@@ -3,10 +3,8 @@ FROM nginx:1.27-alpine AS base
 
 
 
-
-
 # Development stage
-FROM base AS development
+FROM base AS dev
 
 COPY ./nginx-development.conf /etc/nginx/nginx.conf
 COPY ./certs /etc/nginx/certs
@@ -15,10 +13,8 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 
-
-
 # Production stage
-FROM base AS production
+FROM base AS prod
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./certs /etc/nginx/certs

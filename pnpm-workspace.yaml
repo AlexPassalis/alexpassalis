@@ -1,4 +1,0 @@
-packages:
-  - 'contract'
-  - 'back-end/fastify'
-  - 'front-end/next_js'

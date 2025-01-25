@@ -1,5 +1,5 @@
 import s from './index.ts'
-import contract from '@alexpassalis_com/contracts'
+import contract from './../../../contract/src/main.ts'
 import userDB from '../db/db.ts'
 
 const usersRouter = s.router(contract.users, {
