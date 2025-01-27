@@ -47,7 +47,7 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="border border-black p-4">
+        <div className="border border-black p-4 bg-white">
           <h1 className="font-bold">Loading ...</h1>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function HomePage() {
 
             mutate({ body: { email, username } })
           }}
-          className="flex flex-col w-60 border border-black p-4"
+          className="flex flex-col w-60 border border-black p-4 bg-white"
         >
           <label htmlFor="email">Email</label>
           <input
@@ -86,18 +86,22 @@ export default function HomePage() {
 
           <button
             type="submit"
-            className="border border-black self-center w-1/2 hover:bg-green-600 mt-2"
+            className="border border-black self-center w-1/2 mt-2 bg-lime-300 hover:bg-green-600"
           >
             Submit
           </button>
         </form>
 
-        <div className="inline-flex gap-10 border border-black p-4">
+        <div className="inline-flex gap-10 border border-black p-4 bg-white">
           <div>
             <h1 className="justify-self-center font-bold mb-1">UID</h1>
             <div className="flex flex-col gap-1">
               {data.body.map((user, index) => {
-                return <span key={index}>{user.uid}</span>
+                return (
+                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                    {user.uid}
+                  </span>
+                )
               })}
             </div>
           </div>
@@ -105,7 +109,11 @@ export default function HomePage() {
             <h1 className="justify-self-center font-bold mb-1">Email</h1>
             <div className="flex flex-col gap-1">
               {data.body.map((user, index) => {
-                return <span key={index}>{user.email}</span>
+                return (
+                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                    {user.email}
+                  </span>
+                )
               })}
             </div>
           </div>
@@ -113,7 +121,11 @@ export default function HomePage() {
             <h1 className="justify-self-center font-bold mb-1">Username</h1>
             <div className="flex flex-col gap-1">
               {data.body.map((user, index) => {
-                return <span key={index}>{user.username}</span>
+                return (
+                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                    {user.username}
+                  </span>
+                )
               })}
             </div>
           </div>
@@ -124,7 +136,7 @@ export default function HomePage() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="border border-black p-4">
+      <div className="border border-black p-4 bg-white">
         <h1 className="font-bold">Error</h1>
       </div>
     </div>

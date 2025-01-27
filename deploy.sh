@@ -1,9 +1,9 @@
 # Stop and remove containers
-docker stop container-nginx container-next-js-1 container-next-js-2 container-next-js-3
-docker rm container-nginx container-next-js-1 container-next-js-2 container-next-js-3
+docker stop container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
+docker rm container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
 
 # Remove images and network
-docker rmi image-nginx image-next-js
+docker rmi image-fastify image-next_js image-nginx 
 docker network rm network-alexpassalis_com
 
 # Remove old directory
@@ -16,5 +16,7 @@ ssh-add ~/.ssh/id_ed25519_alexpassalis.com
 # Clone and build
 git clone git@github.com:AlexPassalis/alexpassalis_com.git
 cd alexpassalis_com
-docker build --target runner -t image-next-js ./front-end/next-js
-docker compose up --build -d
+docker build -t image-fastify -f ./apps/fastify.Dockerfile ./apps
+docker build -t image-next_js -f ./apps/next_js.Dockerfile ./apps
+docker build -t image-nginx -f ./apps/web-server/Dockerfile ./apps/web-server
+docker compose -f docker-compose.yml up --build -d
