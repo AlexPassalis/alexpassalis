@@ -60,7 +60,6 @@ WORKDIR /app/next_js
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=build --chown=nextjs:nodejs /app/next_js/public ./public
 COPY --from=build --chown=nextjs:nodejs /app/next_js/.next/standalone ./
 
 USER nextjs
