@@ -30,6 +30,9 @@ WORKDIR /app/fastify
 COPY ./fastify ./
 COPY --from=deps /app/fastify/node_modules ./node_modules
 
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+
 CMD ["npm", "run", "dev"]
 
 
@@ -56,12 +59,10 @@ WORKDIR /app/fastify
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=build --chown=nextjs:nodejs /app/fastify/public ./public
-COPY --from=build --chown=nextjs:nodejs /app/fastify/.next/standalone ./
+COPY --from=build --chown=nextjs:nodejs /app/fastify/dist ./dist
 
 USER nextjs
 
 ENV NODE_ENV=production
-ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["node", "dist/index.cjs"]

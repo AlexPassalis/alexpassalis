@@ -4,27 +4,36 @@ networks:
     driver: bridge
 
 services:
-  next-js-1:
-    image: image-next-js
-    container_name: container-next-js-1
+  fastify-1:
+    image: image-fastify
+    container_name: container-fastify-1
+    environment:
+      - PORT=4001
+    networks:
+      - app-network
+    restart: always
+
+  next_js-1:
+    image: image-next_js
+    container_name: container-next_js-1
     environment:
       - PORT=3001
     networks:
       - app-network
     restart: always
 
-  next-js-2:
-    image: image-next-js
-    container_name: container-next-js-2
+  next_js-2:
+    image: image-next_js
+    container_name: container-next_js-2
     environment:
       - PORT=3002
     networks:
       - app-network
     restart: always
 
-  next-js-3:
-    image: image-next-js
-    container_name: container-next-js-3
+  next_js-3:
+    image: image-next_js
+    container_name: container-next_js-3
     environment:
       - PORT=3003
     networks:
@@ -32,10 +41,6 @@ services:
     restart: always
 
   nginx:
-    build:
-      context: ./web-server
-      dockerfile: Dockerfile
-      target: production
     image: image-nginx
     container_name: container-nginx
     ports:
@@ -43,7 +48,8 @@ services:
     networks:
       - app-network
     depends_on:
-      - next-js-1
-      - next-js-2
-      - next-js-3
+      - fastify-1
+      - next_js-1
+      - next_js-2
+      - next_js-3
     restart: always

@@ -1,6 +1,6 @@
-import s from './index.ts'
-import contract from './../../../contract/src/main.ts'
-import userDB from '../db/db.ts'
+import s from './index'
+import contract from './../../../contract/src/main'
+import userDB from '../db/db'
 
 import { v4 } from 'uuid'
 

@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core'
-import users from './routes/users.ts'
-import user from './routes/user.ts'
+import users from './routes/users'
+import user from './routes/user'
 
 const c = initContract()
 

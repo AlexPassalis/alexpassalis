@@ -1,6 +1,6 @@
 'use client'
 
-import { tsr } from '@/lib/tsr.ts'
+import { tsr } from '@/lib/tsr'
 
 export default function HomePage() {
   const tsrQueryClient = tsr.useQueryClient()

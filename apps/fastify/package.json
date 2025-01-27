@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "./src/main.ts",
   "scripts": {
-    "dev": "nodemon --legacy-watch"
+    "dev": "tsx watch src/server.ts",
+    "build": "esbuild src/server.ts --bundle --platform=node --outfile=dist/index.cjs --format=cjs --target=es2022",
+    "start": "node dist/index.cjs"
   },
   "type": "module",
   "dependencies": {
@@ -15,8 +17,9 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
+    "@types/node": "^22.10.10",
+    "esbuild": "^0.24.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
 }
