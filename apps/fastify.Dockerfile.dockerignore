@@ -3,4 +3,3 @@ contract/.gitignore
 
 fastify/node_modules
 fastify/.gitignore
-fastify/nodemon.json
