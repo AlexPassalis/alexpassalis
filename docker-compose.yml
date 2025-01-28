@@ -7,53 +7,55 @@ services:
   fastify-1:
     image: image-fastify
     container_name: container-fastify-1
-    environment:
-      - PORT=4001
-      - NEXT_JS_ORIGIN=http://alexpassalis.com
     networks:
       - app-network
     restart: always
+    environment:
+      - PORT=4001
 
   next_js-1:
     image: image-next_js
     container_name: container-next_js-1
-    environment:
-      - PORT=3001
-      - NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
     networks:
       - app-network
     restart: always
+    depends_on:
+      - fastify-1
+    environment:
+      - PORT=3001
 
   next_js-2:
     image: image-next_js
     container_name: container-next_js-2
-    environment:
-      - PORT=3002
-      - NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
     networks:
       - app-network
     restart: always
+    depends_on:
+      - fastify-1
+    environment:
+      - PORT=3002
 
   next_js-3:
     image: image-next_js
     container_name: container-next_js-3
-    environment:
-      - PORT=3003
-      - NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
     networks:
       - app-network
     restart: always
+    depends_on:
+      - fastify-1
+    environment:
+      - PORT=3003
 
   nginx:
     image: image-nginx
     container_name: container-nginx
-    ports:
-      - '443:443'
     networks:
       - app-network
+    restart: always
     depends_on:
       - fastify-1
       - next_js-1
       - next_js-2
       - next_js-3
-    restart: always
+    ports:
+      - '443:443'

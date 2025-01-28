@@ -33,6 +33,8 @@ COPY --from=deps /app/fastify/node_modules ./node_modules
 ENV NODE_ENV=development
 ENV CHOKIDAR_USEPOLLING=true
 
+ENV NEXT_JS_ORIGIN=http://alexpassalis.com
+
 CMD ["npm", "run", "dev"]
 
 
@@ -64,5 +66,7 @@ COPY --from=build --chown=nextjs:nodejs /app/fastify/dist ./dist
 USER nextjs
 
 ENV NODE_ENV=production
+
+ENV NEXT_JS_ORIGIN=http://alexpassalis.com
 
 CMD ["node", "dist/index.cjs"]
