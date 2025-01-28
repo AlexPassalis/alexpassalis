@@ -92,9 +92,9 @@ export default function HomePage() {
           </button>
         </form>
 
-        <div className="inline-flex gap-4 border border-black p-4 bg-white overflow-y-auto max-h-[50vh] w-full">
+        <div className="inline-flex gap-4 border border-black p-4 bg-white overflow-y-auto max-h-[50vh] w-11/12">
           <div className="flex-1">
-            <h1 className="justify-self-center font-bold mb-2">UID</h1>
+            <h1 className="text-center font-bold mb-2">UID</h1>
             <div className="flex flex-col gap-2">
               {data.body.map((user, index) => {
                 return (
