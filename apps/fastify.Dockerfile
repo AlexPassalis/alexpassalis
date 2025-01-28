@@ -64,10 +64,10 @@ WORKDIR /app/fastify
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=build --chown=nextjs:nodejs /app/fastify/dist ./dist
+COPY --from=build --chown=nextjs:nodejs /app/fastify/build ./build
 
 USER nextjs
 
 ENV NODE_ENV=production
 
-CMD ["node", "dist/index.cjs"]
+CMD ["node", "build/fastify/src/server.js"]

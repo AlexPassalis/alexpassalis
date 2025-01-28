@@ -1,5 +1,6 @@
 contract/node_modules
 contract/.gitignore
 
+fastify/build
 fastify/node_modules
 fastify/.gitignore

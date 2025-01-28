@@ -1,6 +1,6 @@
 import s from './index'
 import contract from './../../../contract/src/main'
-import userDB from '../db/db'
+import userDB from './../db/db'
 
 const usersRouter = s.router(contract.users, {
   get: async () => {
