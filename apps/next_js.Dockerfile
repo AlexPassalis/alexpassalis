@@ -34,8 +34,6 @@ ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV WATCHPACK_POLLING=true
 
-ENV NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
-
 CMD ["npm", "run", "dev"]
 
 
@@ -69,7 +67,5 @@ USER nextjs
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME="0.0.0.0"
-
-ENV NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
 
 CMD ["node", "server.js"]
