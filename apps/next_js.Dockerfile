@@ -34,6 +34,8 @@ ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV WATCHPACK_POLLING=true
 
+ARG NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
+
 CMD ["npm", "run", "dev"]
 
 
@@ -46,6 +48,8 @@ COPY --from=deps /app/contract/node_modules ./node_modules
 WORKDIR /app/next_js
 COPY ./next_js ./
 COPY --from=deps /app/next_js/node_modules ./node_modules
+
+ARG NEXT_PUBLIC_FASTIFY_BASE_URL=https://alexpassalis.com
 
 RUN \
   if [ -f package-lock.json ]; then npm run build; \

@@ -33,6 +33,8 @@ COPY --from=deps /app/fastify/node_modules ./node_modules
 ENV NODE_ENV=development
 ENV CHOKIDAR_USEPOLLING=true
 
+ARG NEXT_JS_ORIGIN=http://alexpassalis.com
+
 CMD ["npm", "run", "dev"]
 
 
@@ -45,6 +47,8 @@ COPY --from=deps /app/contract/node_modules ./node_modules
 WORKDIR /app/fastify
 COPY ./fastify ./
 COPY --from=deps /app/fastify/node_modules ./node_modules
+
+ARG NEXT_JS_ORIGIN=http://alexpassalis.com
 
 RUN \
   if [ -f package-lock.json ]; then npm run build; \
