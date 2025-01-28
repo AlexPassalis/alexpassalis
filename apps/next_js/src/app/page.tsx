@@ -86,43 +86,52 @@ export default function HomePage() {
 
           <button
             type="submit"
-            className="border border-black self-center w-1/2 mt-2 bg-lime-300 hover:bg-green-600"
+            className="border border-black self-center w-1/2 mt-2 bg-orange-500 hover:bg-green-500"
           >
             Submit
           </button>
         </form>
 
-        <div className="inline-flex gap-10 border border-black p-4 bg-white">
-          <div>
-            <h1 className="justify-self-center font-bold mb-1">UID</h1>
-            <div className="flex flex-col gap-1">
+        <div className="inline-flex gap-4 border border-black p-4 bg-white overflow-y-auto max-h-[50vh] w-full">
+          <div className="flex-1">
+            <h1 className="justify-self-center font-bold mb-2">UID</h1>
+            <div className="flex flex-col gap-2">
               {data.body.map((user, index) => {
                 return (
-                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                  <span
+                    key={index}
+                    className="text-center text-xs sm:text-sm md:text-md lg:text-lg"
+                  >
                     {user.uid}
                   </span>
                 )
               })}
             </div>
           </div>
-          <div>
-            <h1 className="justify-self-center font-bold mb-1">Email</h1>
-            <div className="flex flex-col gap-1">
+          <div className="flex-1">
+            <h1 className="justify-self-center font-bold mb-2">Email</h1>
+            <div className="flex flex-col gap-2">
               {data.body.map((user, index) => {
                 return (
-                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                  <span
+                    key={index}
+                    className="text-center text-xs sm:text-sm md:text-md lg:text-lg"
+                  >
                     {user.email}
                   </span>
                 )
               })}
             </div>
           </div>
-          <div>
-            <h1 className="justify-self-center font-bold mb-1">Username</h1>
-            <div className="flex flex-col gap-1">
+          <div className="flex-1">
+            <h1 className="justify-self-center font-bold mb-2">Username</h1>
+            <div className="flex flex-col gap-2">
               {data.body.map((user, index) => {
                 return (
-                  <span key={index} className="text-xs sm:text-sm md:text-base">
+                  <span
+                    key={index}
+                    className="text-center text-xs sm:text-sm md:text-md lg:text-lg"
+                  >
                     {user.username}
                   </span>
                 )

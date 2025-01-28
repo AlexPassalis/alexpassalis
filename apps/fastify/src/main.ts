@@ -11,8 +11,6 @@ import userRouter from './routes/userRouter'
 
 const app = Fastify({ logger: true })
 
-console.log(process.env.NEXT_JS_ORIGIN)
-
 async function start() {
   await app.register(fastifyEnv, fastifyEnvOptions)
   await app.register(cors, {
