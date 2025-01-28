@@ -6,7 +6,6 @@ FROM nginx:1.27-alpine AS base
 # Development stage
 FROM base AS dev
 
-COPY ./nginx-development.conf /etc/nginx/nginx.conf
 COPY ./certs /etc/nginx/certs
 
 CMD ["nginx", "-g", "daemon off;"]
