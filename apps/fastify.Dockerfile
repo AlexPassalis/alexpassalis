@@ -49,6 +49,7 @@ COPY ./fastify ./
 COPY --from=deps /app/fastify/node_modules ./node_modules
 
 ARG NEXT_JS_ORIGIN=http://alexpassalis.com
+ENV NEXT_JS_ORIGIN=${NEXT_JS_ORIGIN}
 
 RUN \
   if [ -f package-lock.json ]; then npm run build; \
