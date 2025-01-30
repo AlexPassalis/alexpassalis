@@ -1,9 +1,9 @@
 # Stop and remove containers
-docker stop container-postgres container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
-docker rm container-postgres container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
+docker stop container-dozzle container-postgres container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
+docker rm container-dozzle container-postgres container-fastify-1 container-next_js-1 container-next_js-2 container-next_js-3 container-nginx
 
 # Remove images and network
-docker rmi image-postgres image-fastify image-next_js image-nginx 
+docker rmi image-amir20/dozzle image-postgres image-fastify image-next_js image-nginx 
 docker network rm network-alexpassalis_com
 
 # Remove old directory
