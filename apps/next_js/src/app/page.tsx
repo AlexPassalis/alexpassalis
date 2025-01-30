@@ -5,15 +5,15 @@ import { tsr } from '@/lib/tsr'
 export default function HomePage() {
   const tsrQueryClient = tsr.useQueryClient()
 
-  const { data, isLoading } = tsr.users.get.useQuery({
+  const { data, isLoading } = tsr.users.getAll.useQuery({
     queryKey: ['users'],
   })
 
-  const { mutate } = tsr.user.create.useMutation({
+  const { mutate } = tsr.users.create.useMutation({
     onMutate: async newUser => {
-      const currentUsers = tsrQueryClient.users.get.getQueryData(['users'])
+      const currentUsers = tsrQueryClient.users.getAll.getQueryData(['users'])
 
-      tsrQueryClient.users.get.setQueryData(['users'], old => {
+      tsrQueryClient.users.getAll.setQueryData(['users'], old => {
         const previousData = old || {
           status: 200,
           body: [],
@@ -36,7 +36,10 @@ export default function HomePage() {
     },
     onError: (error, newUser, context) => {
       if (context?.currentUsers) {
-        tsrQueryClient.users.get.setQueryData(['users'], context.currentUsers)
+        tsrQueryClient.users.getAll.setQueryData(
+          ['users'],
+          context.currentUsers
+        )
       }
     },
     onSettled: () => {

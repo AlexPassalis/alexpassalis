@@ -4,6 +4,19 @@ networks:
     driver: bridge
 
 services:
+  postgres:
+    image: image-postgres
+    container_name: container-postgres
+    networks:
+      - app-network
+    restart: always
+    env_file:
+      - ./apps/postgres/.env
+    environment:
+      - PORT=5432
+    volumes:
+      - ./../volumes/postgresql/data:/var/lib/postgresql/data
+
   fastify-1:
     image: image-fastify
     container_name: container-fastify-1

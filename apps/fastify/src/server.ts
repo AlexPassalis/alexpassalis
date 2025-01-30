@@ -1,11 +1,17 @@
-import app from './main'
+import env from '../env'
+import app, { serverSetup } from './main'
 
-app.listen(
-  { port: Number(process.env.PORT) || 4000, host: '0.0.0.0' },
-  (err, address) => {
-    if (err) {
-      app.log.error(err)
-      process.exit(1)
-    }
+async function startServer() {
+  try {
+    await serverSetup()
+    await app.listen({
+      port: env.PORT,
+      host: env.HOST,
+    })
+  } catch (error) {
+    app.log.error(error, 'Server failed to start')
+    process.exit(1)
   }
-)
+}
+
+startServer()

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "./src/main.ts",
   "scripts": {
+    "db:generate": "npx drizzle-kit generate --config ./drizzle.config.ts",
+    "db:migrate": "cross-env DB_MIGRATING=true npx drizzle-kit push --config ./drizzle.config.ts",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint src",
     "build": "tsc",
@@ -10,9 +12,10 @@
   },
   "dependencies": {
     "@fastify/cors": "^8.5.0",
-    "@fastify/env": "^4.4.0",
-    "@fastify/postgres": "^5.2.2",
     "@ts-rest/fastify": "^3.51.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "dotenv-expand": "^12.0.1",
     "drizzle-orm": "^0.39.0",
     "fastify": "^4.29.0",
     "pg": "^8.13.1",
@@ -21,12 +24,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.12.0",
     "@types/pg": "^8.11.11",
     "drizzle-kit": "^0.30.3",
-    "eslint": "^9.19.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0"
   }
 }
