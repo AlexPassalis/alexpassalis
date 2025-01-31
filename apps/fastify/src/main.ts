@@ -1,5 +1,7 @@
 import Fastify from 'fastify'
 
+import fastifyLoggerOptions from './conf/fastifyLoggerOptions'
+
 import db, { pool } from './db'
 import { sql } from 'drizzle-orm'
 
@@ -12,7 +14,7 @@ import fastifyMetricsOptions from './conf/fastifyMetricsOptions'
 import s from './routes/index'
 import usersRouter from './routes/users/users.router'
 
-const app = Fastify({ logger: true })
+const app = Fastify(fastifyLoggerOptions)
 
 app.addHook('onClose', (instance, done) => {
   pool
