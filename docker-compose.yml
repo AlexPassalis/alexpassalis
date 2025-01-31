@@ -7,10 +7,13 @@ services:
   dozzle:
     image: amir20/dozzle:latest
     container_name: container-dozzle
+    networks:
+      - app-network
+    restart: always
     ports:
       - '127.0.0.1:8080:8080'
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   postgres:
     image: image-postgres
@@ -31,8 +34,32 @@ services:
     networks:
       - app-network
     restart: always
+    depends_on:
+      - postgres
     environment:
       - PORT=4001
+
+  fastify-2:
+    image: image-fastify
+    container_name: container-fastify-2
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - PORT=4002
+
+  fastify-3:
+    image: image-fastify
+    container_name: container-fastify-3
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - PORT=4003
 
   next_js-1:
     image: image-next_js
@@ -42,6 +69,8 @@ services:
     restart: always
     depends_on:
       - fastify-1
+      - fastify-2
+      - fastify-3
     environment:
       - PORT=3001
 
@@ -53,6 +82,8 @@ services:
     restart: always
     depends_on:
       - fastify-1
+      - fastify-2
+      - fastify-3
     environment:
       - PORT=3002
 
@@ -64,6 +95,8 @@ services:
     restart: always
     depends_on:
       - fastify-1
+      - fastify-2
+      - fastify-3
     environment:
       - PORT=3003
 
@@ -75,8 +108,36 @@ services:
     restart: always
     depends_on:
       - fastify-1
+      - fastify-2
+      - fastify-3
       - next_js-1
       - next_js-2
       - next_js-3
     ports:
       - '443:443'
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: container-prometheus
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - fastify-1
+      - fastify-2
+      - fastify-3
+    ports:
+      - '127.0.0.1:9090:9090'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: container-grafana
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - prometheus
+    ports:
+      - '127.0.0.1:3000:3000'
