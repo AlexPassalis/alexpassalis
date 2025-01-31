@@ -117,7 +117,7 @@ services:
       - '443:443'
 
   prometheus:
-    image: prom/prometheus:latest
+    image: image-prometheus
     container_name: container-prometheus
     networks:
       - app-network
@@ -128,12 +128,7 @@ services:
       - fastify-3
     ports:
       - '127.0.0.1:9090:9090'
-    command:
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=7d'
-      - '--storage.tsdb.retention.size=5GB'
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./../volumes/prometheus/data:/prometheus
 
   grafana:

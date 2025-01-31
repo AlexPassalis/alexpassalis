@@ -3,7 +3,7 @@ docker stop container-grafana container-prometheus container-nginx container-nex
 docker rm container-grafana container-prometheus container-nginx container-next_js-3 container-next_js-2 container-next_js-1 container-fastify-3 container-fastify-2 container-fastify-1 container-postgres container-dozzle
 
 # Remove images and network
-docker rmi grafana/grafana prom/prometheus image-nginx image-next_js image-fastify image-postgres image-amir20/dozzle
+docker rmi grafana/grafana image-prometheus image-nginx image-next_js image-fastify image-postgres image-amir20/dozzle
 docker network rm network-alexpassalis_com
 
 # Remove old directory
