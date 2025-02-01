@@ -4,4 +4,4 @@ scrape_configs:
     metrics_path: '/metrics'
     scheme: http
     static_configs:
-      - targets: ['fastify-1:4001', 'fastify-2:4002', 'fastify-3:4003']
+      - targets: ['fastify-1:4001', 'fastify-2:4002']

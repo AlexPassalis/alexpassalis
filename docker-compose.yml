@@ -50,17 +50,6 @@ services:
     environment:
       - PORT=4002
 
-  fastify-3:
-    image: image-fastify
-    container_name: container-fastify-3
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - postgres
-    environment:
-      - PORT=4003
-
   next_js-1:
     image: image-next_js
     container_name: container-next_js-1
@@ -70,7 +59,6 @@ services:
     depends_on:
       - fastify-1
       - fastify-2
-      - fastify-3
     environment:
       - PORT=3001
 
@@ -83,22 +71,8 @@ services:
     depends_on:
       - fastify-1
       - fastify-2
-      - fastify-3
     environment:
       - PORT=3002
-
-  next_js-3:
-    image: image-next_js
-    container_name: container-next_js-3
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - fastify-1
-      - fastify-2
-      - fastify-3
-    environment:
-      - PORT=3003
 
   nginx:
     image: image-nginx
@@ -109,10 +83,8 @@ services:
     depends_on:
       - fastify-1
       - fastify-2
-      - fastify-3
       - next_js-1
       - next_js-2
-      - next_js-3
     ports:
       - '443:443'
 
@@ -125,7 +97,6 @@ services:
     depends_on:
       - fastify-1
       - fastify-2
-      - fastify-3
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
