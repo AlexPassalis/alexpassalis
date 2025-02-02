@@ -1,15 +1,18 @@
 import Fastify from 'fastify'
 
-import fastifyLoggerOptions from './conf/fastifyLoggerOptions'
+import fastifyLoggerOptions from './config/fastifyLoggerOptions'
 
-import db, { pool } from './db'
+import db, { pool } from './lib/db'
 import { sql } from 'drizzle-orm'
 
-import fastifyCors from '@fastify/cors'
-import fastifyCorsOptions from './conf/fastifyCorsOptions'
+// import fastifyCors from '@fastify/cors'
+// import fastifyCorsOptions from './config/fastifyCorsOptions'
 
-import fastifyMetrics from 'fastify-metrics'
-import fastifyMetricsOptions from './conf/fastifyMetricsOptions'
+// import fastifyMetrics from 'fastify-metrics'
+// import fastifyMetricsOptions from './config/fastifyMetricsOptions'
+
+import { toNodeHandler } from 'better-auth/node'
+import auth from './lib/auth'
 
 import s from './routes/index'
 import usersRouter from './routes/users/users.router'
@@ -32,8 +35,13 @@ export async function serverSetup() {
     process.exit(1)
   }
 
-  await app.register(fastifyCors, fastifyCorsOptions)
-  await app.register(fastifyMetrics, fastifyMetricsOptions)
+  // await app.register(fastifyCors, fastifyCorsOptions)
+  // await app.register(fastifyMetrics, fastifyMetricsOptions)
+
+  app.all('/api/auth/*', (request, reply) => {
+    const handler = toNodeHandler(auth)
+    handler(request.raw, reply)
+  })
 
   app.register(s.plugin(usersRouter))
 }

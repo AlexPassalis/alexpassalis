@@ -13,7 +13,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 FROM base AS start
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./certs /etc/nginx/certs
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 CMD ["nginx", "-g", "daemon off;"]

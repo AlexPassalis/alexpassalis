@@ -5,8 +5,8 @@ FROM node:20-alpine AS base
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 
-WORKDIR /app/contract
-COPY ./contract/package.json ./contract/package-lock.json ./
+WORKDIR /app/ts_rest
+COPY ./ts_rest/package.json ./ts_rest/package-lock.json ./
 RUN \
   if [ -f package-lock.json ]; then npm ci; \
   else echo "package-lock.json not found. Please ensure dependencies are locked." && exit 1; \
@@ -22,9 +22,9 @@ RUN \
 
 
 FROM deps AS dev
-WORKDIR /app/contract
-COPY ./contract ./
-COPY --from=deps /app/contract/node_modules ./node_modules
+WORKDIR /app/ts_rest
+COPY ./ts_rest ./
+COPY --from=deps /app/ts_rest/node_modules ./node_modules
 
 WORKDIR /app/next_js
 COPY ./next_js ./
@@ -39,9 +39,9 @@ CMD ["npm", "run", "dev"]
 
 
 FROM deps AS build
-WORKDIR /app/contract
-COPY ./contract ./
-COPY --from=deps /app/contract/node_modules ./node_modules
+WORKDIR /app/ts_rest
+COPY ./ts_rest ./
+COPY --from=deps /app/ts_rest/node_modules ./node_modules
 
 WORKDIR /app/next_js
 COPY ./next_js ./

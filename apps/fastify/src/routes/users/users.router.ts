@@ -1,6 +1,6 @@
 import s from './../index'
-import contract from './../../../../contract/src/main'
-import db from '../../db'
+import contract from './../../../../ts_rest/src/main'
+import db from '../../lib/db/index'
 
 import usersTable from './users.schema'
 

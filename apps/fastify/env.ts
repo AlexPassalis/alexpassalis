@@ -1,10 +1,9 @@
-import { config } from 'dotenv'
+import { config } from 'dotenv-flow'
 import { expand } from 'dotenv-expand'
-import path from 'path'
-import { z, ZodError } from 'zod'
+import { z } from 'zod'
 
-const envFile = process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev'
-expand(config({ path: path.resolve(process.cwd(), envFile) }))
+const envFile = config()
+expand(envFile)
 
 const stringBoolean = z.coerce
   .string()
@@ -25,23 +24,36 @@ const envSchema = z.object({
   PORT: z.coerce.number(),
   HOST: z.string(),
 
+  BETTER_AUTH_SECRET: z.string(),
+  BETTER_AUTH_URL: z.string(),
+
   DB_MIGRATING: stringBoolean,
 })
 
-let _env
+const { error, data } = envSchema.safeParse({
+  POSTGRES_DB: process.env.POSTGRES_DB,
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_HOST: process.env.POSTGRES_HOST,
+  POSTGRES_PORT: process.env.POSTGRES_PORT,
 
-try {
-  _env = envSchema.parse(process.env)
-} catch (error) {
-  if (error instanceof ZodError) {
-    const message = error.issues
-      .map(issue => `${issue.path.join('.')}: ${issue.message}`)
-      .join('\n')
-    throw new Error(`Invalid env variables:\n${message}`)
-  } else {
-    throw error
-  }
+  DATABASE_URL: process.env.DATABASE_URL,
+
+  NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
+
+  PORT: process.env.PORT,
+  HOST: process.env.HOST,
+
+  BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+
+  DB_MIGRATING: process.env.DB_MIGRATING,
+})
+
+if (error) {
+  console.error(error.flatten().fieldErrors)
+  throw new Error('Invalid env variables')
 }
 
-const env = _env
+const env = data
 export default env

@@ -1,8 +1,7 @@
 {
-  "name": "contracts",
+  "name": "ts_rest",
   "version": "1.0.0",
   "main": "./src/main.ts",
-  "type": "module",
   "dependencies": {
     "@ts-rest/core": "^3.51.0",
     "zod": "^3.24.1"
