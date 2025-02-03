@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
-import { tsr } from '@/lib/tsr'
+import tsr from './tsr'
 
 const queryClient = new QueryClient()
 

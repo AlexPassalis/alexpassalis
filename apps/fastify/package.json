@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "./src/main.ts",
   "scripts": {
-    "auth:generate": "cross-env NODE_ENV=development npx @better-auth/cli@latest generate --output ./src/routes/auth/auth.schema.ts",
     "db:generate": "cross-env NODE_ENV=development npx drizzle-kit generate --config ./drizzle.config.ts",
     "db:migrate": "cross-env DB_MIGRATING=true npx drizzle-kit push --config ./drizzle.config.ts",
     "dev": "tsx watch src/server.ts",
@@ -12,15 +11,16 @@
     "start": "node build/fastify/src/server.js"
   },
   "dependencies": {
+    "@auth/core": "^0.37.4",
     "@fastify/cors": "^8.5.0",
     "@ts-rest/fastify": "^3.51.0",
-    "better-auth": "^1.1.15",
     "cross-env": "^7.0.3",
     "dotenv-expand": "^12.0.1",
     "dotenv-flow": "^4.1.0",
     "drizzle-orm": "^0.39.0",
     "fastify": "^4.29.0",
     "fastify-metrics": "^11.0.0",
+    "fastify-next-auth": "^0.7.0",
     "pg": "^8.13.1",
     "uuid": "^11.0.5",
     "zod": "^3.24.1"
