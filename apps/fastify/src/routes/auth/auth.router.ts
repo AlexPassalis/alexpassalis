@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify'
+import fastifyOauth2 from '@fastify/oauth2'
 import { typeEmail } from './../../data/zod/type'
 import {
   errorInvalidEmail,
@@ -21,7 +22,19 @@ import env from './../../../env'
 import { sendVeficationEmail } from './../../lib/nodemailer/index'
 
 export default async function authRouter(fastify: FastifyInstance) {
-  fastify.post<{ Body: { email: string } }>(
+  fastify.register(fastifyOauth2, {
+    name: 'googleOAuth2',
+    scope: ['email', 'profile'],
+    credentials: {
+      client: {
+        id: env.GOOGLE_CLIENT_ID,
+        secret: env.GOOGLE_CLIENT_SECRET,
+      },
+      auth: fastifyOauth2.GOOGLE_CONFIGURATION,
+    },
+    startRedirectPath: '/auth/google',
+    callbackUri: `${env.NEXT_PUBLIC_FASTIFY_BASE_URL}/auth/google/callback`,
+  })
     '/signup/email',
     async (request, reply) => {
       const email = request.body?.email
@@ -90,15 +103,12 @@ export default async function authRouter(fastify: FastifyInstance) {
     }
   )
 
-  fastify.get('signup/google/callback', async (request, reply) => {
-    const { token } =
-      await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
-
+  fastify.get('/auth/google/callback', async function (request, reply) {
+    const token = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
     console.log(token.access_token)
 
-    // if later need to refresh the token this can be used
-    // const { token: newToken } = await this.getNewAccessTokenUsingRefreshToken(token)
+    // Handle the token, e.g., create a session or user in the database
 
-    reply.send({ access_token: token.access_token })
+    reply.redirect('/some-redirect-url') // Redirect to a desired page after successful authentication
   })
 }
