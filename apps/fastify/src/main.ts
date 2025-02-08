@@ -1,9 +1,7 @@
 import Fastify from 'fastify'
 
-import fastifyLoggerOptions from './config/fastifyLoggerOptions'
-
-import db, { pool } from './lib/db'
-import { sql } from 'drizzle-orm'
+import { postgresPing, postgresTeardown } from './lib/postgres'
+import { redisPing, redisTeardown } from './lib/redis'
 
 import fastifyCors from '@fastify/cors'
 import fastifyCorsOptions from './config/fastifyCorsOptions'
@@ -11,35 +9,50 @@ import fastifyCorsOptions from './config/fastifyCorsOptions'
 import fastifyMetrics from 'fastify-metrics'
 import fastifyMetricsOptions from './config/fastifyMetricsOptions'
 
-import fastifyNextAuth from 'fastify-next-auth'
-import fastifyNextAuthOptions from './config/fastifyNextAuthOptions'
+import fastifyCookies from '@fastify/cookie'
+import fastifyCookiesOptions from './config/fastifyCookiesOptions'
 
-import s from './routes/index'
-import usersRouter from './routes/users/users.router'
+import fastifyOauth2 from '@fastify/oauth2'
+import fastifyOauth2Options from './config/fastifyOauth2Options'
 
-const app = Fastify(fastifyLoggerOptions)
+import authRouter from './routes/auth/auth.router'
+import env from './../env'
 
-app.addHook('onClose', (instance, done) => {
-  pool
-    .end()
-    .then(() => done())
-    .catch(done)
-})
+async function main() {
+  await postgresPing()
+  await redisPing()
 
-export async function serverSetup() {
-  try {
-    await db.execute(sql`SELECT 1`)
-    app.log.info('Postgres connected successfully')
-  } catch (error) {
-    app.log.error({ err: error }, 'Failed to connect to Postgres')
-    process.exit(1)
-  }
+  const app = Fastify({ logger: true })
+  app.addHook('onClose', async () => {
+    await postgresTeardown()
+    await redisTeardown()
+  })
 
   await app.register(fastifyCors, fastifyCorsOptions)
   await app.register(fastifyMetrics, fastifyMetricsOptions)
+  await app.register(fastifyCookies, fastifyCookiesOptions)
+  await app.register(fastifyOauth2, {
+    name: 'google',
+    credentials: {
+      client: { id: '', secret: '' },
+      auth: fastifyOauth2.GOOGLE_CONFIGURATION,
+    },
+    startRedirectPath: '/api/auth/signup/google',
+    callbackUri: 'https:/localhost/api/auth/signup/google/callback',
+  })
 
-  app.register(fastifyNextAuth, fastifyNextAuthOptions)
-  app.register(s.plugin(usersRouter))
+  await app.register(authRouter, { prefix: '/api/auth' })
+
+  try {
+    await app.listen({
+      port: env.FASTIFY_PORT,
+      host: env.FASTIFY_HOST,
+    })
+  } catch (e) {
+    app.log.error('Failed to start server')
+    app.log.error(e)
+    process.exit(1)
+  }
 }
 
-export default app
+main()

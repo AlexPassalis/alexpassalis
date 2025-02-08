@@ -3,10 +3,10 @@ import env from './env'
 
 export default defineConfig({
   dialect: 'postgresql',
-  dbCredentials: { url: env.DATABASE_URL },
-  schemaFilter: ['public', 'private'],
-  schema: './src/lib/db/schema.ts',
-  out: './src/lib/db/migrations',
+  dbCredentials: { url: env.POSTGRES_URL },
+  schemaFilter: ['public', 'auth'],
+  schema: './src/lib/postgres/schema.ts',
+  out: './src/lib/postgres/migrations',
   verbose: true,
   strict: true,
 })

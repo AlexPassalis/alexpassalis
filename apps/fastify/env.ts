@@ -17,17 +17,26 @@ const envSchema = z.object({
   POSTGRES_HOST: z.string(),
   POSTGRES_PORT: z.coerce.number(),
 
-  DATABASE_URL: z.string(),
+  POSTGRES_URL: z.string(),
+
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number(),
+  REDIS_PASSWORD: z.string(),
 
   NEXT_JS_ORIGIN: z.string(),
 
-  PORT: z.coerce.number(),
-  HOST: z.string(),
+  FASTIFY_PORT: z.coerce.number(),
+  FASTIFY_HOST: z.string(),
 
-  BETTER_AUTH_SECRET: z.string(),
-  BETTER_AUTH_URL: z.string(),
+  JWT_SECRET: z.string(),
 
-  DB_MIGRATING: stringBoolean,
+  NODEMAILER_HOST: z.string(),
+  NODEMAILER_PORT: z.coerce.number(),
+  NODEMAILER_SECURE: z.coerce.boolean(),
+  NODEMAILER_AUTH_USER: z.string(),
+  NODEMAILER_AUTH_PASS: z.string(),
+
+  POSTGRES_MIGRATING: stringBoolean,
 })
 
 const { error, data } = envSchema.safeParse({
@@ -37,17 +46,26 @@ const { error, data } = envSchema.safeParse({
   POSTGRES_HOST: process.env.POSTGRES_HOST,
   POSTGRES_PORT: process.env.POSTGRES_PORT,
 
-  DATABASE_URL: process.env.DATABASE_URL,
+  POSTGRES_URL: process.env.POSTGRES_URL,
+
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 
   NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
 
-  PORT: process.env.PORT,
-  HOST: process.env.HOST,
+  FASTIFY_PORT: process.env.FASTIFY_PORT,
+  FASTIFY_HOST: process.env.FASTIFY_HOST,
 
-  BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
-  BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+  JWT_SECRET: process.env.JWT_SECRET,
 
-  DB_MIGRATING: process.env.DB_MIGRATING,
+  NODEMAILER_HOST: process.env.NODEMAILER_HOST,
+  NODEMAILER_PORT: process.env.NODEMAILER_PORT,
+  NODEMAILER_SECURE: process.env.NODEMAILER_SECURE,
+  NODEMAILER_AUTH_USER: process.env.NODEMAILER_AUTH_USER,
+  NODEMAILER_AUTH_PASS: process.env.NODEMAILER_AUTH_PASS,
+
+  POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,
 })
 
 if (error) {
