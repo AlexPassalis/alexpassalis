@@ -65,12 +65,12 @@ export default async function authRouter(fastify: FastifyInstance) {
         return
       }
 
-      const token = jwt.sign({ email: emailValidated }, env.JWT_SECRET, {
-        algorithm: 'HS256',
-        expiresIn: '1h',
-      })
-
+      let token;
       try {
+        token = jwt.sign({ email: emailValidated }, env.JWT_SECRET, {
+          algorithm: 'HS256',
+          expiresIn: '1h',
+        })
         await sendVeficationEmail(token, email)
       } catch (e) {
         logger.info('/api/auth/signup error sending email')
