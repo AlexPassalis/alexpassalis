@@ -8,12 +8,5 @@ RUN apk add --no-cache \
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-
-
-FROM base AS dev
-CMD ["postgres"]
-
-
-
 FROM base AS start
 CMD ["postgres"]

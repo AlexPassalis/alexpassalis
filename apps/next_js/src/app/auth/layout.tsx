@@ -1,6 +1,4 @@
 import { ReactNode } from 'react'
-import { GalleryVerticalEnd } from 'lucide-react'
-import { ROUTE_HOME } from '@/data/routes'
 
 export default function AuthLayout({
   children,

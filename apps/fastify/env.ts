@@ -36,6 +36,9 @@ const envSchema = z.object({
   NODEMAILER_AUTH_USER: z.string(),
   NODEMAILER_AUTH_PASS: z.string(),
 
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+
   POSTGRES_MIGRATING: stringBoolean,
 })
 
@@ -64,6 +67,9 @@ const { error, data } = envSchema.safeParse({
   NODEMAILER_SECURE: process.env.NODEMAILER_SECURE,
   NODEMAILER_AUTH_USER: process.env.NODEMAILER_AUTH_USER,
   NODEMAILER_AUTH_PASS: process.env.NODEMAILER_AUTH_PASS,
+
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
   POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,
 })

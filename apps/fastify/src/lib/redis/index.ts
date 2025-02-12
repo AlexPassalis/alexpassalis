@@ -1,6 +1,6 @@
 import Redis from 'ioredis'
 import env from './../../../env'
-import logger from './../../config/logger'
+import { FastifyInstance } from 'fastify'
 
 const redis = new Redis({
   host: env.REDIS_HOST,
@@ -8,28 +8,25 @@ const redis = new Redis({
   password: env.REDIS_PASSWORD,
 })
 
-export async function redisPing() {
+export async function redisTeardown(fastify: FastifyInstance) {
   try {
-    const result = await redis.ping()
-    if (result === 'PONG') {
-      logger.info('Redis connection succeeded')
-    } else {
-      throw new Error(`Unexpected ping result: ${result}`)
-    }
+    await redis.quit()
+    fastify.log.info('Redis disconnected successfully')
   } catch (e) {
-    logger.info('Redis connection failed')
-    logger.error(e)
-    process.exit(1)
+    fastify.log.error({ error: e }, 'Redis disconnection failed')
   }
 }
 
-export async function redisTeardown() {
+export async function redisPing(fastify: FastifyInstance) {
   try {
-    await redis.quit()
-    logger.info('Redis disconnected successfully')
+    const result = await redis.ping()
+    if (result === 'PONG') {
+      fastify.log.info('Redis connection succeeded')
+    } else {
+      throw new Error(`Unexpected redis ping result: ${result}`)
+    }
   } catch (e) {
-    logger.info('Redis disconnection failed')
-    logger.error(e)
+    fastify.log.fatal({ error: e }, 'Redis connection failed')
     process.exit(1)
   }
 }

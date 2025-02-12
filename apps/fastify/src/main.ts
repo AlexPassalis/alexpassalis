@@ -1,56 +1,49 @@
-import Fastify from 'fastify'
-
 import { postgresPing, postgresTeardown } from './lib/postgres'
 import { redisPing, redisTeardown } from './lib/redis'
 
+import Fastify from 'fastify'
+import fastifyLoggerOptions from './config/fastify-logger-options'
+
 import fastifyCors from '@fastify/cors'
-import fastifyCorsOptions from './config/fastifyCorsOptions'
+import fastifyCorsOptions from './config/fastify-cors-options'
 
 import fastifyMetrics from 'fastify-metrics'
-import fastifyMetricsOptions from './config/fastifyMetricsOptions'
+import fastifyMetricsOptions from './config/fastify-metrics-options'
 
-import fastifyCookies from '@fastify/cookie'
-import fastifyCookiesOptions from './config/fastifyCookiesOptions'
+import fastifyCookie from '@fastify/cookie'
+import fastifyCookieOptions from './config/fastify-cookie-options'
 
 import fastifyOauth2 from '@fastify/oauth2'
-import fastifyOauth2Options from './config/fastifyOauth2Options'
+import fastifyOauth2Options from './config/fastify-oath2-options'
 
-import authRouter from './routes/auth/auth.router'
+import authRoutes from './routes/auth/index'
 import env from './../env'
+import { ROUTE_AUTH } from './data/routes'
 
 async function main() {
-  await postgresPing()
-  await redisPing()
-
-  const app = Fastify({ logger: true })
-  app.addHook('onClose', async () => {
-    await postgresTeardown()
-    await redisTeardown()
+  const fastify = Fastify(fastifyLoggerOptions)
+  fastify.addHook('onClose', async () => {
+    await postgresTeardown(fastify)
+    await redisTeardown(fastify)
   })
 
-  await app.register(fastifyCors, fastifyCorsOptions)
-  await app.register(fastifyMetrics, fastifyMetricsOptions)
-  await app.register(fastifyCookies, fastifyCookiesOptions)
-  await app.register(fastifyOauth2, {
-    name: 'google',
-    credentials: {
-      client: { id: '', secret: '' },
-      auth: fastifyOauth2.GOOGLE_CONFIGURATION,
-    },
-    startRedirectPath: '/api/auth/signup/google',
-    callbackUri: 'https:/localhost/api/auth/signup/google/callback',
-  })
+  await postgresPing(fastify)
+  await redisPing(fastify)
 
-  await app.register(authRouter, { prefix: '/api/auth' })
+  await fastify.register(fastifyCors, fastifyCorsOptions)
+  await fastify.register(fastifyMetrics, fastifyMetricsOptions)
+  await fastify.register(fastifyCookie, fastifyCookieOptions)
+  await fastify.register(fastifyOauth2, fastifyOauth2Options)
+
+  await fastify.register(authRoutes, { prefix: ROUTE_AUTH })
 
   try {
-    await app.listen({
+    await fastify.listen({
       port: env.FASTIFY_PORT,
       host: env.FASTIFY_HOST,
     })
   } catch (e) {
-    app.log.error('Failed to start server')
-    app.log.error(e)
+    fastify.log.fatal({ error: e }, 'Failed to start server')
     process.exit(1)
   }
 }
