@@ -1,0 +1,8 @@
+build
+node_modules
+.dockerignore
+.env.test.local
+.gitignore
+Dockerfile
+postgresErrorCodes.txt
+vitest.config.ts

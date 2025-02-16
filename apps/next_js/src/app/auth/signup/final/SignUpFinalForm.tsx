@@ -119,7 +119,7 @@ export default function SignUpFinalForm({
                   Sign up
                 </Button>
               </div>
-              {/* <Countdown exp={exp} /> */}
+              <Countdown exp={exp} />
             </div>
           </form>
         </CardContent>

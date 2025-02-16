@@ -2,6 +2,7 @@ FROM node:20-alpine AS base
 # Install curl for the healthcheck
 RUN apk add --no-cache curl
 
+
 FROM base AS deps
 WORKDIR /app
 COPY ./package.json ./pnpm-lock.yaml ./
@@ -13,11 +14,6 @@ FROM deps AS dev
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-
-ENV NODE_ENV=development
-ENV HOSTNAME="0.0.0.0"
-ENV WATCHPACK_POLLING=true
-ENV NEXT_TELEMETRY_DISABLED=1
 
 CMD ["pnpm", "run", "dev"]
 
@@ -43,12 +39,9 @@ CMD ["pnpm", "run", "dev"]
 # RUN addgroup --system --gid 1001 nodejs
 # RUN adduser --system --uid 1001 nextjs
 
-# COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
+# COPY --from=build --chown=nextjs:nodejs /app/build ./build
 
 # USER nextjs
-
 # ENV NODE_ENV=production
-# ENV NEXT_TELEMETRY_DISABLED=1
-# ENV HOSTNAME="0.0.0.0"
 
-# CMD ["node", "server.js"]
+# CMD ["node", "build/src/server.js"]

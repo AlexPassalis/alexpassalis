@@ -17,15 +17,16 @@ export default async function SignUpFinalPage({
   let payload
   try {
     payload = jwt.decode(token) as { email: string; iat: number; exp: number }
+    console.log(payload)
     typeEmail.parse(payload.email)
     z.number().parse(payload.exp)
   } catch {
     redirect(`${ROUTE_ERROR}?error=token-invalid`)
   }
 
-  // if (Date.now() > payload.exp * 1000) {
-  //   redirect(`${ROUTE_SIGNUP}?message=token-expired`)
-  // }
+  if (Math.floor(Date.now() / 1000) > payload.exp) {
+    redirect(`${ROUTE_SIGNUP}?message=token-expired`)
+  }
 
   return <SignUpFinalForm token={token} exp={payload.exp} />
 }
