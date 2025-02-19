@@ -12,22 +12,22 @@ const stringBoolean = z.coerce
 
 const envSchemaTest = z.object({
   NODE_ENV: z.literal('test'),
-  HOSTNAME: z.string(),
-  PORT: z.coerce.number(),
   NEXT_JS_ORIGIN: z.string(),
-  JWT_SECRET: z.string(),
+  BETTER_AUTH_URL: z.string(),
+  BETTER_AUTH_SECRET: z.string(),
 
-  LOG_LEVEL: z.string(),
+  LOG_LEVEL: z.literal('silent'),
 })
 
 const envSchema = z.object({
   NODE_ENV: z.string(),
-  HOSTNAME: z.string(),
-  PORT: z.coerce.number(),
+  HOSTNAME: z.string().default('0.0.0.0'),
+  PORT: z.coerce.number().default(4000),
   NEXT_JS_ORIGIN: z.string(),
-  JWT_SECRET: z.string(),
+  BETTER_AUTH_URL: z.string(),
+  BETTER_AUTH_SECRET: z.string(),
 
-  LOG_LEVEL: z.string(),
+  LOG_LEVEL: z.literal('debug'),
 
   POSTGRES_URL: z.string(),
   POSTGRES_MIGRATING: stringBoolean,
@@ -42,8 +42,8 @@ const envSchema = z.object({
   NODEMAILER_AUTH_USER: z.string(),
   NODEMAILER_AUTH_PASS: z.string(),
 
-  // GOOGLE_CLIENT_ID: z.string(),
-  // GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
 })
 
 const { error, data } =
@@ -53,7 +53,8 @@ const { error, data } =
         HOSTNAME: process.env.HOSTNAME,
         PORT: process.env.PORT,
         NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
-        JWT_SECRET: process.env.JWT_SECRET,
+        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 
         LOG_LEVEL: process.env.LOG_LEVEL,
       })
@@ -62,7 +63,8 @@ const { error, data } =
         HOSTNAME: process.env.HOSTNAME,
         PORT: process.env.PORT,
         NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
-        JWT_SECRET: process.env.JWT_SECRET,
+        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 
         LOG_LEVEL: process.env.LOG_LEVEL,
 
@@ -79,8 +81,8 @@ const { error, data } =
         NODEMAILER_AUTH_USER: process.env.NODEMAILER_AUTH_USER,
         NODEMAILER_AUTH_PASS: process.env.NODEMAILER_AUTH_PASS,
 
-        // GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-        // GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
       })
 
 if (error) {

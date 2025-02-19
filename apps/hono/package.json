@@ -7,7 +7,7 @@
     "lint": "eslint ./src --config ./eslint.config.mjs",
     "test": "cross-env NODE_ENV=test vitest --config ./vitest.config.ts",
     "build": "tsc",
-    "better-auth:generate": "cross-env NODE_ENV=development npx @better-auth/cli generate --config ./src/config/newAuth.ts --output ./src/api/auth/auth.schema.ts",
+    "better-auth:generate": "cross-env NODE_ENV=development npx @better-auth/cli generate --config ./src/lib/better-auth/schema.ts --output ./src/api/auth/auth.schema.ts",
     "postgres:generate": "cross-env NODE_ENV=development drizzle-kit generate --config ./drizzle.config.ts",
     "postgres:migrate": "cross-env POSTGRES_MIGRATING=true drizzle-kit push --config ./drizzle.config.ts"
   },
@@ -34,10 +34,13 @@
   "devDependencies": {
     "@better-auth/cli": "^1.1.18",
     "@eslint/js": "^9.20.0",
+    "@faker-js/faker": "^9.5.0",
     "@testcontainers/postgresql": "^10.18.0",
     "@testcontainers/redis": "^10.18.0",
     "@types/node": "^20.11.17",
+    "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.11.11",
+    "@types/react": "^19.0.9",
     "drizzle-kit": "^0.30.4",
     "eslint": "^9.20.1",
     "globals": "^15.15.0",

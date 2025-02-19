@@ -19,7 +19,7 @@ export async function redisTeardown(redis: Redis) {
     await redis.quit()
     logger.info('Redis disconnected successfully')
   } catch (e) {
-    logger.error({ error: e }, 'Redis disconnection failed')
+    logger.error({ err: e }, 'Redis disconnection failed')
   }
 }
 
@@ -32,7 +32,7 @@ export async function redisPing(redis: Redis) {
       throw new Error(`Unexpected redis ping result: ${result}`)
     }
   } catch (e) {
-    logger.fatal({ error: e }, 'Redis connection failed')
+    logger.fatal({ err: e }, 'Redis connection failed')
     process.exit(1)
   }
 }

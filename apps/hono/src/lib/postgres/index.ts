@@ -26,7 +26,7 @@ export async function postgresTearDown(postgresPool: PostgresPool) {
     await postgresPool.end()
     logger.info('Postgres disconnected successfully')
   } catch (e) {
-    logger.error({ error: e }, 'Postgres disconnection failed')
+    logger.error({ err: e }, 'Postgres disconnection failed')
   }
 }
 
@@ -35,7 +35,7 @@ export async function postgresPing(postgres: Postgres) {
     await postgres.execute(sql`SELECT 1`)
     logger.info('Postgres connected successfully')
   } catch (e) {
-    logger.fatal({ error: e }, 'Postgres connection failed')
+    logger.fatal({ err: e }, 'Postgres connection failed')
     process.exit(1)
   }
 }

@@ -1,7 +1,6 @@
 import { PinoLogger } from 'hono-pino'
 import { Postgres } from '@/lib/postgres'
 import Redis from 'ioredis'
-import newHono from '@/utils/newHono'
 
 export interface apiBindings {
   Variables: {
@@ -12,5 +11,3 @@ export interface apiBindings {
     redis: Redis
   }
 }
-
-export type HonoInstance = ReturnType<typeof newHono>
