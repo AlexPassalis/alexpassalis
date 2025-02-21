@@ -33,17 +33,22 @@ jobs:
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
+          # Generate a timestamp tag
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+
           # Build the image and tag it with "latest"
           docker build -t $IMAGE_NAME:latest -f apps/postgres/Dockerfile .
 
-          # Add a timestamp tag for versioning
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          # Explicitly tag the image with the timestamp
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
+
+          # Store TIMESTAMP for later use in push step
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
       - name: Push image-postgres to GHCR
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
-          # Push both the latest and timestamped images
+          # Use the stored TIMESTAMP value
           docker push $IMAGE_NAME:latest
-          docker push $IMAGE_NAME:$(date +%Y%m%d%H%M%S)
+          docker push $IMAGE_NAME:$TIMESTAMP
