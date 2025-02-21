@@ -32,18 +32,30 @@ jobs:
           IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
           # Build the image and tag it with "latest"
-          docker build -t $IMAGE_NAME:latest -f ./apps/postgres/Dockerfile ./apps/postgres
+          docker build \
+            -t $IMAGE_NAME:latest \
+            -f ./apps/postgres/Dockerfile \
+            ./apps/postgres
 
           # Explicitly tag the image with the timestamp
-          docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
+          docker tag \
+            $IMAGE_NAME:latest \
+            $IMAGE_NAME:$TIMESTAMP
 
       - name: image-redis (build and tag)
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-redis"
-          docker build --target build -t $IMAGE_NAME:latest -f ./apps/redis/Dockerfile ./apps/redis
-          docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 
-      - name: image-hono (test)
+          docker build \
+            -t $IMAGE_NAME:latest \
+            -f ./apps/redis/Dockerfile \
+            ./apps/redis
+
+          docker tag \
+            $IMAGE_NAME:latest \
+            $IMAGE_NAME:$TIMESTAMP
+
+      - name: image-hono (test, build and tag)
         env:
           HONO_HOSTNAME: ${{ vars.HONO_HOSTNAME }}
           HONO_PORT: ${{ vars.HONO_PORT }}
@@ -53,23 +65,18 @@ jobs:
           HONO_LOG_LEVEL_TEST: ${{ vars.HONO_LOG_LEVEL_TEST }}
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
-          docker build --target test -t $IMAGE_NAME:test -f ./apps/hono/Dockerfile ./apps/hono
 
-          docker run --rm \
-            --name container-hono \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -e HONO_HOSTNAME=$HONO_HOSTNAME \
-            -e HONO_PORT=$HONO_PORT \
-            -e HONO_NEXTJS_ORIGIN=$HONO_NEXTJS_ORIGIN \
-            -e HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
-            -e HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
-            -e HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
-            $IMAGE_NAME:test
+          docker build \
+            --build-arg HONO_HOSTNAME=$HONO_HOSTNAME \
+            --build-arg HONO_PORT=$HONO_PORT \
+            --build-arg HONO_NEXTJS_ORIGIN=$HONO_NEXTJS_ORIGIN \
+            --build-arg HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
+            --build-arg HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
+            --build-arg HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
+            -t $IMAGE_NAME:latest \
+            -f ./apps/hono/Dockerfile \
+            ./apps/hono
 
-      - name: image-hono (build and tag)
-        run: |
-          IMAGE_NAME="ghcr.io/$OWNER/image-hono"
-          docker build --target start -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 
   # push:
@@ -80,10 +87,10 @@ jobs:
   #       username: ${{ github.actor }}
   #       password: ${{ secrets.GHCR_PAT }}
 
-  # - name: Push image-postgres to GHCR
-  #   run: |
-  #     IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
+  #   - name: Push image-postgres to GHCR
+  #     run: |
+  #       IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
-  #     # Use the stored TIMESTAMP value
-  #     docker push $IMAGE_NAME:latest
-  #     docker push $IMAGE_NAME:$TIMESTAMP
+  #       # Use the stored TIMESTAMP value
+  #       docker push $IMAGE_NAME:latest
+  #       docker push $IMAGE_NAME:$TIMESTAMP

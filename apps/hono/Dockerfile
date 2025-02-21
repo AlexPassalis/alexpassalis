@@ -3,6 +3,7 @@ FROM node:20-alpine AS base
 RUN apk add --no-cache curl
 
 
+
 FROM base AS deps
 WORKDIR /app
 COPY ./package.json ./pnpm-lock.yaml ./
@@ -28,7 +29,7 @@ CMD ["pnpm", "run", "test"]
 
 
 
-FROM deps as build
+FROM test as build
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
