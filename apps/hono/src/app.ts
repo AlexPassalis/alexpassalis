@@ -6,11 +6,12 @@ import { pinoLogger } from '@/config/logger'
 import { cors } from 'hono/cors'
 import corsOptions from '@/config/corsOptions'
 import newBetterAuth from '@/lib/better-auth/index'
-import { Transporter } from '@/lib/nodemailer/index'
+import { EmailInfo, Transporter } from '@/lib/nodemailer/index'
 
 export default async function appBuildUp(
   postgres: Postgres,
   redis: Redis,
+  emailInfo: undefined | EmailInfo,
   nodemailer_auth_user: string,
   transporter: Transporter
 ) {
@@ -30,7 +31,12 @@ export default async function appBuildUp(
     return c.text('ok', 200)
   })
 
-  const auth = newBetterAuth(postgres, nodemailer_auth_user, transporter)
+  const auth = newBetterAuth(
+    postgres,
+    emailInfo,
+    nodemailer_auth_user,
+    transporter
+  )
   api.on(['POST', 'GET'], '/auth/**', c => {
     return auth.handler(c.req.raw)
   })

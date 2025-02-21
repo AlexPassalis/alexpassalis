@@ -5,21 +5,26 @@ import { postgresBuildUp, postgresTearDown } from '@/lib/postgres/index'
 import appBuildUp from '@/app'
 import { redisBuildUp, redisTeardown } from '@/lib/redis'
 import {
+  EmailInfo,
   newNodemailer,
+  Nodemailer,
   nodemailerTransporterBuildUp,
 } from '@/lib/nodemailer/index'
 
-export function serverBuildUp(
+export async function serverBuildUp(
   postgres_url: string,
   postgres_migrating: boolean,
   redis_host: string,
   redis_port: number,
   redis_password: string,
+  nodemailer: Nodemailer,
   nodemailer_host: string,
   nodemailer_port: number,
   nodemailer_secure: boolean,
   nodemailer_auth_user: string,
-  nodemailer_auth_password: string
+  nodemailer_auth_pass: string,
+  hostname: string,
+  port: number
 ) {
   const { postgresPool, postgres } = postgresBuildUp(
     postgres_url,
@@ -27,37 +32,21 @@ export function serverBuildUp(
   )
   const redis = redisBuildUp(redis_host, redis_port, redis_password)
 
-  const nodemailer = newNodemailer()
   const transporter = nodemailerTransporterBuildUp(
     nodemailer,
     nodemailer_host,
     nodemailer_port,
     nodemailer_secure,
     nodemailer_auth_user,
-    nodemailer_auth_password
+    nodemailer_auth_pass
   )
 
-  return { postgresPool, postgres, redis, nodemailer, transporter }
-}
-
-async function serverStart(hostname: string, port: number) {
-  const { postgresPool, postgres, redis, transporter } = serverBuildUp(
-    env.POSTGRES_URL,
-    env.POSTGRES_MIGRATING,
-    env.REDIS_HOST,
-    env.REDIS_PORT,
-    env.REDIS_PASSWORD,
-    env.NODEMAILER_HOST,
-    env.NODEMAILER_PORT,
-    env.NODEMAILER_SECURE,
-    env.NODEMAILER_AUTH_USER,
-    env.NODEMAILER_AUTH_PASSWORD
-  )
-
+  let emailInfo: undefined | EmailInfo
   const api = await appBuildUp(
     postgres,
     redis,
-    env.NODEMAILER_AUTH_USER,
+    emailInfo,
+    nodemailer_auth_user,
     transporter
   )
 
@@ -76,8 +65,27 @@ async function serverStart(hostname: string, port: number) {
     await postgresTearDown(postgresPool)
     await redisTeardown(redis)
   })
+
+  return { postgres, redis, emailInfo, api, server }
 }
 
+export type Server = Awaited<ReturnType<typeof serverBuildUp>>['server']
+
 if (process.env.NODE_ENV !== 'test') {
-  serverStart(env.HOSTNAME, env.PORT)
+  const nodemailer = newNodemailer()
+  serverBuildUp(
+    env.POSTGRES_URL,
+    env.POSTGRES_MIGRATING,
+    env.REDIS_HOST,
+    env.REDIS_PORT,
+    env.REDIS_PASSWORD,
+    nodemailer,
+    env.NODEMAILER_HOST,
+    env.NODEMAILER_PORT,
+    env.NODEMAILER_SECURE,
+    env.NODEMAILER_AUTH_USER,
+    env.NODEMAILER_AUTH_PASS,
+    env.HOSTNAME,
+    env.PORT
+  )
 }

@@ -15,7 +15,7 @@ export function nodemailerTransporterBuildUp(
   nodemailer_port: number,
   nodemailer_secure: boolean,
   nodemailer_auth_user: string,
-  nodemailer_auth_password: string
+  nodemailer_auth_pass: string
 ) {
   const transporter = nodemailer.createTransport({
     host: nodemailer_host,
@@ -23,7 +23,7 @@ export function nodemailerTransporterBuildUp(
     secure: nodemailer_secure,
     auth: {
       user: nodemailer_auth_user,
-      pass: nodemailer_auth_password,
+      pass: nodemailer_auth_pass,
     },
   })
   return transporter
@@ -42,7 +42,11 @@ export async function sendEmailOTP(
     from: nodemailer_auth_user,
     to: email,
     subject: 'alexpassalis.com',
+    text: 'This is the text field',
     html: emailHtml,
   }
-  await transporter.sendMail(options)
+  const info = await transporter.sendMail(options)
+  return info
 }
+
+export type EmailInfo = Awaited<ReturnType<typeof sendEmailOTP>>

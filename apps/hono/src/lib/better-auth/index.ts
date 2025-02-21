@@ -11,10 +11,11 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { user, session, account, verification } from '@/lib/postgres/schema'
 import betterAuthError from '@/lib/better-auth/utils/betterAuthError'
 import { emailOTP } from 'better-auth/plugins'
-import { Transporter, sendEmailOTP } from '@/lib/nodemailer/index'
+import { EmailInfo, Transporter, sendEmailOTP } from '@/lib/nodemailer/index'
 
 export default function newBetterAuth(
   postgres: Postgres,
+  emailInfo: undefined | EmailInfo,
   nodemailer_auth_user: string,
   transporter: Transporter
 ) {
@@ -55,7 +56,12 @@ export default function newBetterAuth(
         sendVerificationOTP: async ({ email, otp, type }, request) => {
           if (type === 'sign-in') {
             try {
-              await sendEmailOTP(otp, nodemailer_auth_user, email, transporter)
+              emailInfo = await sendEmailOTP(
+                otp,
+                nodemailer_auth_user,
+                email,
+                transporter
+              )
             } catch (e) {
               betterAuthError(errorEmailSending, request, e)
             }

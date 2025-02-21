@@ -17,16 +17,30 @@ services:
 
   postgres:
     image: image-postgres
+    build:
+      context: ./apps/postgres
+      dockerfile: Dockerfile
     container_name: container-postgres
     networks:
       - app-network
     restart: always
-    env_file:
-      - ./apps/postgres/.env
     environment:
-      - PORT=5432
+      POSTGRES_DB: dev_postgres_db
+      POSTGRES_USER: dev_postgres_user
+      POSTGRES_PASSWORD: dev_postgres_password
+      POSTGRES_HOST: dev-postgres
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -h localhost -U dev_postgres_user -d dev_postgres_db',
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 2
     volumes:
-      - ./../volumes/postgresql/data:/var/lib/postgresql/data
+      - ./volumes/postgresql/data:/var/lib/postgresql/data
 
   fastify-1:
     image: image-fastify

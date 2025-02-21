@@ -3,29 +3,30 @@ import {
   StartedPostgreSqlContainer,
 } from '@testcontainers/postgresql'
 import { RedisContainer, StartedRedisContainer } from '@testcontainers/redis'
-import { beforeEach, afterAll, beforeAll } from 'vitest'
+import { beforeEach, afterAll, beforeAll, expect } from 'vitest'
 import path from 'path'
-import { Postgres, PostgresPool, postgresTearDown } from '@/lib/postgres/index'
+import { Postgres } from '@/lib/postgres/index'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import Redis from 'ioredis'
-import { redisTeardown } from '@/lib/redis/index'
 import { sql } from 'drizzle-orm'
-import { serverBuildUp } from '@/server'
-import { newNodemailer, Nodemailer, Transporter } from '@/lib/nodemailer'
-import appBuildUp from '@/app'
+import { Server, serverBuildUp } from '@/server'
+import { EmailInfo, newNodemailer, Nodemailer } from '@/lib/nodemailer'
+import env from '@/env'
 import { HonoInstance } from '@/config/newHono'
+import { account, session, user, verification } from '@/api/auth/auth.schema'
 
 let postgresContainerTest: StartedPostgreSqlContainer
-let postgresPoolTest: PostgresPool
 let postgresTest: Postgres
 
 let redisContainerTest: StartedRedisContainer
 let redisTest: Redis
 
 let nodemailerTest: Nodemailer
-let transporterTest: Transporter
+let emailInfoTest: undefined | EmailInfo
 
 let apiTest: HonoInstance
+
+let serverTest: Server
 
 const timeout = 30_000
 
@@ -34,27 +35,33 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 beforeAll(async () => {
+  // creates a new server instance between each test file, which might not be optimal
   postgresContainerTest = await new PostgreSqlContainer().start()
   redisContainerTest = await new RedisContainer().start()
   nodemailerTest = newNodemailer()
   const nodemailerAccountTest = await nodemailerTest.createTestAccount()
 
-  const server = serverBuildUp(
+  const server = await serverBuildUp(
     postgresContainerTest.getConnectionUri(),
     false,
     redisContainerTest.getHost(),
     redisContainerTest.getPort(),
     redisContainerTest.getPassword(),
+    nodemailerTest,
     nodemailerAccountTest.smtp.host,
     nodemailerAccountTest.smtp.port,
     nodemailerAccountTest.smtp.secure,
     nodemailerAccountTest.user,
-    nodemailerAccountTest.pass
+    nodemailerAccountTest.pass,
+    env.HOSTNAME,
+    env.PORT
   )
 
-  postgresPoolTest = server.postgresPool
   postgresTest = server.postgres
   redisTest = server.redis
+  emailInfoTest = server.emailInfo
+  apiTest = server.api
+  serverTest = server.server
 
   const migrationsFolder = path.join(
     process.cwd(),
@@ -66,14 +73,14 @@ beforeAll(async () => {
   await migrate(postgresTest, {
     migrationsFolder,
   })
-
-  apiTest = await appBuildUp(
-    postgresTest,
-    redisTest,
-    nodemailerAccountTest.user,
-    server.transporter
-  )
 }, timeout)
+
+async function postgresEmptyCheck() {
+  expect((await postgresTest.select().from(user)).length).toBe(0)
+  expect((await postgresTest.select().from(session)).length).toBe(0)
+  expect((await postgresTest.select().from(account)).length).toBe(0)
+  expect((await postgresTest.select().from(verification)).length).toBe(0)
+}
 
 beforeEach(async () => {
   await postgresTest.execute(sql`
@@ -82,14 +89,19 @@ beforeEach(async () => {
     TRUNCATE TABLE auth.account CASCADE;
     TRUNCATE TABLE auth.verification CASCADE;
   `)
+  await postgresEmptyCheck()
   await redisTest.flushall()
 })
 
 afterAll(async () => {
-  await postgresTearDown(postgresPoolTest)
+  await new Promise<void>((resolve, reject) => {
+    serverTest.close(err => {
+      if (err) return reject(err)
+      resolve()
+    })
+  })
   await postgresContainerTest?.stop()
-  await redisTeardown(redisTest)
   await redisContainerTest?.stop()
 }, timeout)
 
-export { apiTest, postgresTest, redisTest, transporterTest, nodemailerTest }
+export { postgresTest, redisTest, apiTest, nodemailerTest, emailInfoTest }

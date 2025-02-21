@@ -79,9 +79,10 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                         setOnRequest(false)
                         console.log(response)
                       },
-                      onSuccess: () => {
+                      onSuccess: response => {
                         setOnRequest(false)
-                        router.push(ROUTE_LOGIN)
+                        console.log(response)
+                        // router.push(ROUTE_LOGIN)
                       },
                     }
                   )

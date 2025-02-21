@@ -12,6 +12,8 @@ const stringBoolean = z.coerce
 
 const envSchemaTest = z.object({
   NODE_ENV: z.literal('test'),
+  HOSTNAME: z.string(),
+  PORT: z.coerce.number(),
   NEXT_JS_ORIGIN: z.string(),
   BETTER_AUTH_URL: z.string(),
   BETTER_AUTH_SECRET: z.string(),
@@ -21,8 +23,8 @@ const envSchemaTest = z.object({
 
 const envSchema = z.object({
   NODE_ENV: z.string(),
-  HOSTNAME: z.string().default('0.0.0.0'),
-  PORT: z.coerce.number().default(4000),
+  HOSTNAME: z.string(),
+  PORT: z.coerce.number(),
   NEXT_JS_ORIGIN: z.string(),
   BETTER_AUTH_URL: z.string(),
   BETTER_AUTH_SECRET: z.string(),

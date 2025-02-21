@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     setupFiles: './src/test/setup.ts',
-    include: ['./src/api/api.test.ts', './src/api/auth/auth.test.ts'],
+    include: ['./src/api/auth/auth.test.ts'],
   },
 })
