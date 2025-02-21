@@ -1,4 +1,4 @@
-name: Build Test Push
+name: Test Build Push
 
 on:
   workflow_dispatch:
@@ -43,7 +43,7 @@ jobs:
           docker build --target build -t $IMAGE_NAME:latest -f ./apps/redis/Dockerfile ./apps/redis
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 
-      - name: image-hono (build, test and tag)
+      - name: image-hono (test)
         env:
           HONO_HOSTNAME: ${{ vars.HONO_HOSTNAME }}
           HONO_PORT: ${{ vars.HONO_PORT }}
@@ -53,19 +53,23 @@ jobs:
           HONO_LOG_LEVEL_TEST: ${{ vars.HONO_LOG_LEVEL_TEST }}
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
-          docker build --target build -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
+          docker build --target test -t $IMAGE_NAME:test -f ./apps/hono/Dockerfile ./apps/hono
 
-          # Run tests inside a container
           docker run --rm \
             --name container-hono \
+            -v /var/run/docker.sock:/var/run/docker.sock \
             -e HONO_HOSTNAME=$HONO_HOSTNAME \
             -e HONO_PORT=$HONO_PORT \
             -e HONO_NEXT_JS_ORIGIN=$HONO_NEXT_JS_ORIGIN \
             -e HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
             -e HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
             -e HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
-            $IMAGE_NAME:latest pnpm run test
+            $IMAGE_NAME:test
 
+      - name: image-hono (build and tag)
+        run: |
+          IMAGE_NAME="ghcr.io/$OWNER/image-hono"
+          docker build --target start -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 
   # push:

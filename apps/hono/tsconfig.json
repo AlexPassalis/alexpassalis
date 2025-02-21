@@ -5,7 +5,6 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": { "@/*": ["./src/*"] },
-    "outDir": "./build",
     "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
@@ -14,5 +13,5 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"]
+  "include": ["./src"]
 }

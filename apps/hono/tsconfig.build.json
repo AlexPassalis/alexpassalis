@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build"
+  },
+  "exclude": [
+    "./src/test",
+    "./src/api/api.test.ts",
+    "./src/api/auth/auth.test.ts"
+  ]
+}

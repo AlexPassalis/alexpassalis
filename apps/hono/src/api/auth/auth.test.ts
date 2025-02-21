@@ -2,9 +2,7 @@ import { describe, test, expect } from 'vitest'
 import { createAuthClient } from 'better-auth/react'
 import env from '@/env'
 import { emailOTPClient } from 'better-auth/client/plugins'
-import { nodemailerTest, emailInfoTest } from '@/test/setup'
 import { faker } from '@faker-js/faker'
-import { user, session, account, verification } from '@/lib/postgres/schema'
 
 describe('/api/auth', () => {
   const authClient = createAuthClient({

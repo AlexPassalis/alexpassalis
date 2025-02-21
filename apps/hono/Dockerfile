@@ -19,14 +19,21 @@ CMD ["pnpm", "run", "dev"]
 
 
 
+FROM deps as test
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+
+CMD ["pnpm", "run", "test"]
+
+
+
 FROM deps as build
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
-ENV NODE_ENV=production
-
-CMD ["tsc"]
+CMD ["pnpm", "run", "build"]
 
 
 
