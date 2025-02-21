@@ -1,6 +1,6 @@
 FROM node:20-alpine AS base
-# Install curl for the healthcheck
-RUN apk add --no-cache curl
+# Install curl for the healthcheck and basic packages needed for building native modules
+RUN apk add --no-cache curl python3 make g++ openssl-dev
 
 
 
