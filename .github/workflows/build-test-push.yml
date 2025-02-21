@@ -50,7 +50,7 @@ jobs:
           HONO_NEXT_JS_ORIGIN: ${{ vars.HONO_NEXT_JS_ORIGIN }}
           HONO_BETTER_AUTH_URL: ${{ vars.HONO_BETTER_AUTH_URL }}
           HONO_BETTER_AUTH_SECRET: ${{ secrets.HONO_BETTER_AUTH_SECRET }}
-          HONO_LOG_LEVEL_TEST: ${{ secrets.HONO_LOG_LEVEL_TEST }}
+          HONO_LOG_LEVEL_TEST: ${{ vars.HONO_LOG_LEVEL_TEST }}
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
           docker build --target build -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
