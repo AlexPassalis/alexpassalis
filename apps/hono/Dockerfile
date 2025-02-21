@@ -33,7 +33,7 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
-CMD ["pnpm", "run", "build"]
+RUN pnpm run build
 
 
 
@@ -47,5 +47,4 @@ COPY --from=build --chown=hono:nodehono /app/build ./build
 
 USER hono
 ENV NODE_ENV=production
-
 CMD ["node", "./build/src/server.js"]
