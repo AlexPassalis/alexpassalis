@@ -138,7 +138,7 @@ const { error, data } = envSchema.safeParse({
   NODE_ENV: process.env.NODE_ENV,
   HONO_HOSTNAME: process.env.HONO_HOSTNAME,
   HONO_PORT: process.env.HONO_PORT,
-  HONO_NEXT_JS_ORIGIN: process.env.HONO_NEXTJS_ORIGIN,
+  HONO_NEXTJS_ORIGIN: process.env.HONO_NEXTJS_ORIGIN,
   HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
   HONO_BETTER_AUTH_SECRET: process.env.HONO_BETTER_AUTH_SECRET,
 
