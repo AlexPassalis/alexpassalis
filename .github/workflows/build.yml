@@ -21,9 +21,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Convert the repository owner name to lowercase
+        run: |
+          echo "OWNER=$(echo \"${{ github.repository_owner }}\" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Build and tag image-postgres
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/image-postgres
+          IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
           # Build the image and tag it with "latest"
           docker build -t $IMAGE_NAME:latest -f apps/postgres/Dockerfile .
@@ -34,7 +38,7 @@ jobs:
 
       - name: Push image-postgres to GHCR
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/image-postgres
+          IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
 
           # Push both the latest and timestamped images
           docker push $IMAGE_NAME:latest
