@@ -19,29 +19,26 @@ CMD ["pnpm", "run", "dev"]
 
 
 
-# FROM deps AS build
-# WORKDIR /app
-# COPY . .
-# COPY --from=deps /app/node_modules ./node_modules
+FROM deps as build
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
 
-# ENV NODE_ENV=production
+ENV NODE_ENV=production
 
-# RUN \
-#   if [ -f package-lock.json ]; then npm run build; \
-#   else echo "package-lock.json not found. Please ensure dependencies are locked." && exit 1; \
-#   fi
+CMD ["tsc"]
 
 
 
-# FROM build AS start
-# WORKDIR /app
+FROM build AS start
+WORKDIR /app
 
-# RUN addgroup --system --gid 1001 nodejs
-# RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodehono
+RUN adduser --system --uid 1001 hono
 
-# COPY --from=build --chown=nextjs:nodejs /app/build ./build
+COPY --from=build --chown=hono:nodehono /app/build ./build
 
-# USER nextjs
-# ENV NODE_ENV=production
+USER hono
+ENV NODE_ENV=production
 
-# CMD ["node", "build/src/server.js"]
+CMD ["node", "./build/src/server.js"]
