@@ -46,7 +46,7 @@ jobs:
       - name: image-hono (build, test and tag)
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
-          docker build --target build -t $IMAGE_NAME:latest -f ./apps/postgres/Dockerfile ./apps/postgres
+          docker build --target build -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
 
           # Run tests inside a container
           docker run --rm \
