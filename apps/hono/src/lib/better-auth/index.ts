@@ -33,18 +33,22 @@ export default function newBetterAuth(
       autoSignIn: false,
       requireEmailVerification: true,
       password: {
-        hash: () => {
+        hash: (() => {
           return null
-        },
-        verify: () => {
+        }) as unknown as (password: string) => Promise<string>, // return null no matter what password is provided.
+        verify: (() => {
           betterAuthError(errorPasswordSignIn)
-        },
+          return
+        }) as unknown as (data: {
+          hash: string
+          password: string
+        }) => Promise<boolean>, // throw an error when someone tries to log in using password
       },
     },
     socialProviders: {
       google: {
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
+        clientId: env.GOOGLE_CLIENT_ID!,
+        clientSecret: env.GOOGLE_CLIENT_SECRET!,
       },
     },
     plugins: [

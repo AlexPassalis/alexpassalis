@@ -76,17 +76,17 @@ export type Server = Awaited<ReturnType<typeof serverBuildUp>>['server']
 if (process.env.NODE_ENV !== 'test') {
   const nodemailer = newNodemailer()
   serverBuildUp(
-    env.POSTGRES_URL,
+    env.POSTGRES_URL!,
     env.POSTGRES_MIGRATING,
-    env.REDIS_HOST,
-    env.REDIS_PORT,
-    env.REDIS_PASSWORD,
+    env.REDIS_HOST!,
+    env.REDIS_PORT!,
+    env.REDIS_PASSWORD!,
     nodemailer,
-    env.NODEMAILER_HOST,
-    env.NODEMAILER_PORT,
-    env.NODEMAILER_SECURE,
-    env.NODEMAILER_AUTH_USER,
-    env.NODEMAILER_AUTH_PASS,
+    env.NODEMAILER_HOST!,
+    env.NODEMAILER_PORT!,
+    env.NODEMAILER_SECURE!,
+    env.NODEMAILER_AUTH_USER!,
+    env.NODEMAILER_AUTH_PASS!,
     env.HONO_HOSTNAME,
     env.HONO_PORT
   )
