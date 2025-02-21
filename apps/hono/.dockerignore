@@ -5,4 +5,3 @@ node_modules
 .gitignore
 Dockerfile
 postgresErrorCodes.txt
-vitest.config.ts

@@ -22,14 +22,16 @@ const envSchemaTest = z.object({
 })
 
 const envSchema = z.object({
-  NODE_ENV: z.string(),
+  NODE_ENV: z.enum(['development', 'production']),
   HOSTNAME: z.string(),
   PORT: z.coerce.number(),
   NEXT_JS_ORIGIN: z.string(),
   BETTER_AUTH_URL: z.string(),
   BETTER_AUTH_SECRET: z.string(),
 
-  LOG_LEVEL: z.literal('debug'),
+  LOG_LEVEL: z.literal(
+    process.env.NODE_ENV === 'development' ? 'debug' : 'info'
+  ),
 
   POSTGRES_URL: z.string(),
   POSTGRES_MIGRATING: stringBoolean,
@@ -58,7 +60,7 @@ const { error, data } =
         BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
         BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 
-        LOG_LEVEL: process.env.LOG_LEVEL,
+        LOG_LEVEL: process.env.LOG_LEVEL_TEST,
       })
     : envSchema.safeParse({
         NODE_ENV: process.env.NODE_ENV,
