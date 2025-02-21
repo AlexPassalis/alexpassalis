@@ -50,7 +50,13 @@ jobs:
 
           # Run tests inside a container
           docker run --rm \
-            --name container-hono $IMAGE_NAME:latest pnpm run test
+            --name container-hono \
+            -e HONO_HOSTNAME=${{ variables.HONO_HOSTNAME }} \
+            -e HONO_PORT=${{ variables.HONO_PORT }} \
+            -e HONO_NEXT_JS_ORIGIN=${{ variables.HONO_NEXT_JS_ORIGIN }} \
+            -e HONO_BETTER_AUTH_URL=${{ variables.HONO_BETTER_AUTH_URL }} \
+            -e HONO_BETTER_AUTH_SECRET=${{ secrets.HONO_BETTER_AUTH_SECRET }} \
+            $IMAGE_NAME:latest pnpm run test
 
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 

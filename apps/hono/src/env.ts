@@ -12,24 +12,26 @@ const stringBoolean = z.coerce
 
 const envSchemaTest = z.object({
   NODE_ENV: z.literal('test'),
-  HOSTNAME: z.string(),
-  PORT: z.coerce.number(),
-  NEXT_JS_ORIGIN: z.string(),
-  BETTER_AUTH_URL: z.string(),
-  BETTER_AUTH_SECRET: z.string(),
+  HONO_HOSTNAME: z.string(),
+  HONO_PORT: z.coerce.number(),
+  HONO_NEXT_JS_ORIGIN: z.string(),
+  HONO_BETTER_AUTH_URL: z.string(),
+  HONO_BETTER_AUTH_SECRET: z.string(),
 
-  LOG_LEVEL: z.literal('silent'),
+  HONO_LOG_LEVEL: z.literal('silent'),
 })
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production']),
-  HOSTNAME: z.string(),
-  PORT: z.coerce.number(),
-  NEXT_JS_ORIGIN: z.string(),
-  BETTER_AUTH_URL: z.string(),
-  BETTER_AUTH_SECRET: z.string(),
+  NODE_ENV: z.literal(
+    process.env.NODE_ENV === 'development' ? 'development' : 'production'
+  ),
+  HONO_HOSTNAME: z.string(),
+  HONO_PORT: z.coerce.number(),
+  HONO_NEXT_JS_ORIGIN: z.string(),
+  HONO_BETTER_AUTH_URL: z.string(),
+  HONO_BETTER_AUTH_SECRET: z.string(),
 
-  LOG_LEVEL: z.literal(
+  HONO_LOG_LEVEL: z.literal(
     process.env.NODE_ENV === 'development' ? 'debug' : 'info'
   ),
 
@@ -54,23 +56,23 @@ const { error, data } =
   process.env.NODE_ENV === 'test'
     ? envSchemaTest.safeParse({
         NODE_ENV: process.env.NODE_ENV,
-        HOSTNAME: process.env.HOSTNAME,
-        PORT: process.env.PORT,
-        NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
-        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
-        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+        HONO_HOSTNAME: process.env.HONO_HOSTNAME,
+        HONO_PORT: process.env.HONO_PORT,
+        HONO_NEXT_JS_ORIGIN: process.env.HONO_NEXT_JS_ORIGIN,
+        HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
+        HONO_BETTER_AUTH_SECRET: process.env.HONO_BETTER_AUTH_SECRET,
 
-        LOG_LEVEL: process.env.LOG_LEVEL_TEST,
+        HONO_LOG_LEVEL: process.env.HONO_LOG_LEVEL_TEST,
       })
     : envSchema.safeParse({
         NODE_ENV: process.env.NODE_ENV,
-        HOSTNAME: process.env.HOSTNAME,
-        PORT: process.env.PORT,
-        NEXT_JS_ORIGIN: process.env.NEXT_JS_ORIGIN,
-        BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
-        BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+        HONO_HOSTNAME: process.env.HONO_HOSTNAME,
+        HONO_PORT: process.env.HONO_PORT,
+        HONO_NEXT_JS_ORIGIN: process.env.HONO_NEXT_JS_ORIGIN,
+        HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
+        HONO_BETTER_AUTH_SECRET: process.env.HONO_BETTER_AUTH_SECRET,
 
-        LOG_LEVEL: process.env.LOG_LEVEL,
+        HONO_LOG_LEVEL: process.env.HONO_LOG_LEVEL,
 
         POSTGRES_URL: process.env.POSTGRES_URL,
         POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,

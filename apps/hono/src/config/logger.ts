@@ -4,7 +4,7 @@ import env from '@/env'
 import { v4 as uuid } from 'uuid'
 
 export const logger = pino({
-  level: env.LOG_LEVEL,
+  level: env.HONO_LOG_LEVEL,
   serializers: {
     req: req => ({
       method: req.method,

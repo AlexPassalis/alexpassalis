@@ -23,8 +23,8 @@ export async function serverBuildUp(
   nodemailer_secure: boolean,
   nodemailer_auth_user: string,
   nodemailer_auth_pass: string,
-  hostname: string,
-  port: number
+  hono_hostname: string,
+  hono_port: number
 ) {
   const { postgresPool, postgres } = postgresBuildUp(
     postgres_url,
@@ -52,12 +52,14 @@ export async function serverBuildUp(
 
   const server = serve({
     fetch: api.fetch,
-    hostname: hostname,
-    port: port,
+    hostname: hono_hostname,
+    port: hono_port,
   })
 
   server.on('listening', () => {
-    logger.info(`Server is listening on hostname:${hostname}, port:${port}`)
+    logger.info(
+      `Server is listening on hostname:${hono_hostname}, port:${hono_port}`
+    )
   })
 
   server.on('close', async () => {
@@ -85,7 +87,7 @@ if (process.env.NODE_ENV !== 'test') {
     env.NODEMAILER_SECURE,
     env.NODEMAILER_AUTH_USER,
     env.NODEMAILER_AUTH_PASS,
-    env.HOSTNAME,
-    env.PORT
+    env.HONO_HOSTNAME,
+    env.HONO_PORT
   )
 }
