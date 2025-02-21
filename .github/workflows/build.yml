@@ -23,7 +23,7 @@ jobs:
 
       - name: Convert the repository owner name to lowercase
         run: |
-          echo "OWNER=$(echo \"${{ github.repository_owner }}\" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Build and tag image-postgres
         run: |
