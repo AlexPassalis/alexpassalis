@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build Test Push
 
 on:
   workflow_dispatch:
@@ -44,6 +44,13 @@ jobs:
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
 
       - name: image-hono (build, test and tag)
+        env:
+          HONO_HOSTNAME: ${{ vars.HONO_HOSTNAME }}
+          HONO_PORT: ${{ vars.HONO_PORT }}
+          HONO_NEXT_JS_ORIGIN: ${{ vars.HONO_NEXT_JS_ORIGIN }}
+          HONO_BETTER_AUTH_URL: ${{ vars.HONO_BETTER_AUTH_URL }}
+          HONO_BETTER_AUTH_SECRET: ${{ secrets.HONO_BETTER_AUTH_SECRET }}
+          HONO_LOG_LEVEL_TEST: ${{ secrets.HONO_LOG_LEVEL_TEST }}
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
           docker build --target build -t $IMAGE_NAME:latest -f ./apps/hono/Dockerfile ./apps/hono
@@ -51,11 +58,12 @@ jobs:
           # Run tests inside a container
           docker run --rm \
             --name container-hono \
-            -e HONO_HOSTNAME=${{ variables.HONO_HOSTNAME }} \
-            -e HONO_PORT=${{ variables.HONO_PORT }} \
-            -e HONO_NEXT_JS_ORIGIN=${{ variables.HONO_NEXT_JS_ORIGIN }} \
-            -e HONO_BETTER_AUTH_URL=${{ variables.HONO_BETTER_AUTH_URL }} \
-            -e HONO_BETTER_AUTH_SECRET=${{ secrets.HONO_BETTER_AUTH_SECRET }} \
+            -e HONO_HOSTNAME=$HONO_HOSTNAME \
+            -e HONO_PORT=$HONO_PORT \
+            -e HONO_NEXT_JS_ORIGIN=$HONO_NEXT_JS_ORIGIN \
+            -e HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
+            -e HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
+            -e HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
             $IMAGE_NAME:latest pnpm run test
 
           docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
