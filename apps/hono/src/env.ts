@@ -10,7 +10,7 @@ const stringBoolean = z.coerce
   .transform(val => val === 'true')
   .default('false')
 
-let expectedSchemaTypes = {} as {
+const expectedSchemaTypes = {} as {
   node_env:
     | z.ZodLiteral<'development'>
     | z.ZodLiteral<'test'>
