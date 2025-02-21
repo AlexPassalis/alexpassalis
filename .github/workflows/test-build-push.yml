@@ -49,7 +49,7 @@ jobs:
           HONO_PORT: ${{ vars.HONO_PORT }}
           HONO_NEXT_JS_ORIGIN: ${{ vars.HONO_NEXT_JS_ORIGIN }}
           HONO_BETTER_AUTH_URL: ${{ vars.HONO_BETTER_AUTH_URL }}
-          HONO_BETTER_AUTH_SECRET: ${{ secrets.HONO_BETTER_AUTH_SECRET }}
+          HONO_BETTER_AUTH_SECRET: f69e0cca7a547dd2631ba01edf50fdce07f6ce8e8d40c1d44e9d309bb3e992611335f466207319e4b97f8263e474d1c4540aec539f7492c88a0480e8926ce382
           HONO_LOG_LEVEL_TEST: ${{ vars.HONO_LOG_LEVEL_TEST }}
         run: |
           IMAGE_NAME="ghcr.io/$OWNER/image-hono"
