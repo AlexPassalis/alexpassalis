@@ -8,7 +8,7 @@ permissions:
   packages: write
 
 jobs:
-  build-and-test:
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository into GitHub Actions runner (ubuntu VM)
@@ -77,20 +77,35 @@ jobs:
             -f ./apps/hono/Dockerfile \
             ./apps/hono
 
-          docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TIMESTAMP
+          docker tag \
+            $IMAGE_NAME:latest \
+            $IMAGE_NAME:$TIMESTAMP
 
-  # push:
-  #   - name: Log in to GitHub Container Registry (GHCR)
-  #     uses: docker/login-action@v2
-  #     with:
-  #       registry: ghcr.io
-  #       username: ${{ github.actor }}
-  #       password: ${{ secrets.GHCR_PAT }}
+    # push:
+    #   needs: test-and-build
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #     - name: Log in to GitHub Container Registry (GHCR)
+    #       uses: docker/login-action@v2
+    #       with:
+    #         registry: ghcr.io
+    #         username: ${{ github.actor }}
+    #         password: ${{ secrets.GHCR_PAT }}
 
-  #   - name: Push image-postgres to GHCR
-  #     run: |
-  #       IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
+    #     - name: Push image-postgres to GHCR
+    #       run: |
+    #         IMAGE_NAME="ghcr.io/$OWNER/image-postgres"
+    #         docker push $IMAGE_NAME:latest
+    #         docker push $IMAGE_NAME:$TIMESTAMP
 
-  #       # Use the stored TIMESTAMP value
-  #       docker push $IMAGE_NAME:latest
-  #       docker push $IMAGE_NAME:$TIMESTAMP
+    #     - name: Push image-redis to GHCR
+    #       run: |
+    #         IMAGE_NAME="ghcr.io/$OWNER/image-redis"
+    #         docker push $IMAGE_NAME:latest
+    #         docker push $IMAGE_NAME:$TIMESTAMP
+
+    #     - name: Push image-hono to GHCR
+    #       run: |
+    #         IMAGE_NAME="ghcr.io/$OWNER/image-hono"
+    #         docker push $IMAGE_NAME:latest
+    #         docker push $IMAGE_NAME:$TIMESTAMP
