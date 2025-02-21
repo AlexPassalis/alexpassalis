@@ -60,7 +60,7 @@ jobs:
             -v /var/run/docker.sock:/var/run/docker.sock \
             -e HONO_HOSTNAME=$HONO_HOSTNAME \
             -e HONO_PORT=$HONO_PORT \
-            -e HONO_NEXT_JS_ORIGIN=$HONO_NEXT_JS_ORIGIN \
+            -e HONO_NEXTJS_ORIGIN=$HONO_NEXTJS_ORIGIN \
             -e HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
             -e HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
             -e HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
