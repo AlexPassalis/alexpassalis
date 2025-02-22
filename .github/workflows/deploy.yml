@@ -3,8 +3,22 @@ name: Deploy
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Hello, world!"
+      - name: Clone repository into GitHub Actions runner (ubuntu VM)
+        uses: actions/checkout@v3
+
+      - name: Copy-Paste docker-compose.yml file from github repository to VPS
+        uses: appleboy/scp-action
+        with:
+          username: ${{ env.VPS_USER }}
+          host: ${{ env.VPS_IP }}
+          password: ${{ env.VPS_PASSPHRASE }}
+          source: './docker-compose.yml'
+          target: '/home/${{ env.VPS_USER }}/alexpassalis_com/docker-compose.yml'
