@@ -24,7 +24,7 @@ jobs:
           HONO_NEXTJS_ORIGIN: https://localhost
           HONO_BETTER_AUTH_URL: https://localhost
           HONO_BETTER_AUTH_SECRET: f69e0cca7a547dd2631ba01edf50fdce07f6ce8e8d40c1d44e9d309bb3e992611335f466207319e4b97f8263e474d1c4540aec539f7492c88a0480e8926ce382
-          HONO_LOG_LEVEL_TEST: silent
+          HONO_LOG_LEVEL: silent
         run: |
           docker build --target test -t image-hono-test -f ./apps/hono/Dockerfile ./apps/hono
 
@@ -36,7 +36,7 @@ jobs:
             -e HONO_NEXTJS_ORIGIN=$HONO_NEXTJS_ORIGIN \
             -e HONO_BETTER_AUTH_URL=$HONO_BETTER_AUTH_URL \
             -e HONO_BETTER_AUTH_SECRET=$HONO_BETTER_AUTH_SECRET \
-            -e HONO_LOG_LEVEL_TEST=$HONO_LOG_LEVEL_TEST \
+            -e HONO_LOG_LEVEL=$HONO_LOG_LEVEL \
             image-hono-test
 
   build-and-push:
