@@ -142,10 +142,7 @@ const { error, data } = envSchema.safeParse({
   HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
   HONO_BETTER_AUTH_SECRET: process.env.HONO_BETTER_AUTH_SECRET,
 
-  HONO_LOG_LEVEL:
-    process.env.NODE_ENV === 'test'
-      ? process.env.HONO_LOG_LEVEL_TEST
-      : process.env.HONO_LOG_LEVEL,
+  HONO_LOG_LEVEL: process.env.HONO_LOG_LEVEL,
 
   POSTGRES_URL: process.env.POSTGRES_URL,
   POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,

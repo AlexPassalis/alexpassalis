@@ -1,6 +1,6 @@
 FROM node:20-alpine AS base
-# Install curl for the healthcheck and basic packages needed for building native modules
-RUN apk add --no-cache curl python3 make g++ openssl-dev
+# Install curl for the healthcheck
+RUN apk add --no-cache curl
 
 
 
@@ -25,18 +25,11 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
-ARG HONO_HOSTNAME=HONO_HOSTNAME
-ARG HONO_PORT=HONO_PORT
-ARG HONO_NEXTJS_ORIGIN=HONO_NEXTJS_ORIGIN
-ARG HONO_BETTER_AUTH_URL=HONO_BETTER_AUTH_URL
-ARG HONO_BETTER_AUTH_SECRET=HONO_BETTER_AUTH_SECRET
-ARG HONO_LOG_LEVEL_TEST=HONO_LOG_LEVEL_TEST
-
-RUN pnpm run test
+CMD ["pnpm", "run", "test"]
 
 
 
-FROM test as build
+FROM deps as build
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
