@@ -60,6 +60,7 @@ jobs:
           echo "IMAGE_REDIS=ghcr.io/$OWNER/image-redis" >> $GITHUB_ENV
           echo "IMAGE_HONO=ghcr.io/$OWNER/image-hono" >> $GITHUB_ENV
           echo "IMAGE_NEXTJS=ghcr.io/$OWNER/image-nextjs" >> $GITHUB_ENV
+          echo "IMAGE_NGINX=ghcr.io/$OWNER/image-nginx" >> $GITHUB_ENV
 
       - name: Generate a common TIMESTAMP for all images
         run: |
@@ -111,6 +112,17 @@ jobs:
           $IMAGE_NEXTJS:latest \
           $IMAGE_NEXTJS:$TIMESTAMP
 
+      - name: image-nginx (build and tag)
+        run: |
+          docker build \
+          -t $IMAGE_NGINX:latest \
+          -f ./apps/nginx/Dockerfile \
+          ./apps/nginx
+
+          docker tag \
+          $IMAGE_NGINX:latest \
+          $IMAGE_NGINX:$TIMESTAMP
+
       - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
@@ -131,3 +143,6 @@ jobs:
 
           docker push $IMAGE_NEXTJS:latest
           docker push $IMAGE_NEXTJS:$TIMESTAMP
+
+          docker push $IMAGE_NGINX:latest
+          docker push $IMAGE_NGINX:$TIMESTAMP
