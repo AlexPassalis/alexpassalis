@@ -26,7 +26,7 @@ jobs:
           HONO_BETTER_AUTH_SECRET: f69e0cca7a547dd2631ba01edf50fdce07f6ce8e8d40c1d44e9d309bb3e992611335f466207319e4b97f8263e474d1c4540aec539f7492c88a0480e8926ce382
           HONO_LOG_LEVEL: silent
         run: |
-          docker build --no-cache --target test -t image-hono-test -f ./apps/hono/Dockerfile ./apps/hono
+          docker build --target test -t image-hono-test -f ./apps/hono/Dockerfile ./apps/hono
 
           docker run --rm \
             --name container-hono-test \

@@ -5,7 +5,7 @@ RUN apk add --no-cache \
     python3 \
     make \
     g++ \
-    openssl-dev \
+    openssl \
     && ln -sf /usr/bin/python3 /usr/bin/python
 
 
