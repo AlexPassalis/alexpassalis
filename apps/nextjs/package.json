@@ -3,9 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev",
-    "build": "cross-env NODE_ENV=production next build",
-    "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build": "cross-env NODE_ENV=production next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

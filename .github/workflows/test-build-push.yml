@@ -104,6 +104,7 @@ jobs:
           docker build \
           -t $IMAGE_NEXTJS:latest \
           -f ./apps/nextjs/Dockerfile \
+          -e NEXT_PUBLIC_BETTER_AUTH_URL=https://localhost/api/auth \
           ./apps/nextjs
 
           docker tag \
