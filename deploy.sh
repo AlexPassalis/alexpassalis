@@ -20,4 +20,4 @@ docker build -t image-postgres -f ./apps/postgres/Dockerfile ./apps/postgres
 docker build -t image-fastify -f ./apps/fastify/Dockerfile ./apps/fastify
 docker build -t image-next_js -f ./apps/next_js/Dockerfile ./apps/next_js
 docker build -t image-nginx -f ./apps/nginx/Dockerfile ./apps/nginx
-docker compose -f docker-compose.yml up --build -d
+docker compose --build -d
