@@ -1,7 +1,9 @@
 build
 node_modules
 .dockerignore
-.env.test.local
+.env
+.env.development
+.env.test
 .gitignore
 Dockerfile
 postgresErrorCodes.txt

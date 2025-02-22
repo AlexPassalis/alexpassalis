@@ -19,15 +19,15 @@ import {
 
 import { errorInvalidEmail } from './../../../data/zod/error'
 import { authClient } from '@/lib/better-auth'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 export default function SignUpPage() {
   return <SignUpForm />
 }
 
 function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  const router = useRouter()
-  const [onRequest, setOnRequest] = useState(false)
+  // const router = useRouter()
+  const [, setOnRequest] = useState(false)
   const [signInEmail, setSignInEmail] = useState(false)
   const [email, setEmail] = useState('')
 
@@ -197,7 +197,7 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                     </div>
                   </div>
                   <div className="text-center text-sm">
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <a
                       href={ROUTE_SIGNUP}
                       className="underline underline-offset-4"

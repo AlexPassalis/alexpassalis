@@ -59,6 +59,7 @@ jobs:
           echo "IMAGE_POSTGRES=ghcr.io/$OWNER/image-postgres" >> $GITHUB_ENV
           echo "IMAGE_REDIS=ghcr.io/$OWNER/image-redis" >> $GITHUB_ENV
           echo "IMAGE_HONO=ghcr.io/$OWNER/image-hono" >> $GITHUB_ENV
+          echo "IMAGE_NEXTJS=ghcr.io/$OWNER/image-nextjs" >> $GITHUB_ENV
 
       - name: Generate a common TIMESTAMP for all images
         run: |
@@ -98,6 +99,17 @@ jobs:
           $IMAGE_HONO:latest \
           $IMAGE_HONO:$TIMESTAMP
 
+      - name: image-nextjs (build and tag)
+        run: |
+          docker build \
+          -t $IMAGE_NEXTJS:latest \
+          -f ./apps/nextjs/Dockerfile \
+          ./apps/nextjs
+
+          docker tag \
+          $IMAGE_NEXTJS:latest \
+          $IMAGE_NEXTJS:$TIMESTAMP
+
       - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
@@ -115,3 +127,6 @@ jobs:
 
           docker push $IMAGE_HONO:latest
           docker push $IMAGE_HONO:$TIMESTAMP
+
+          docker push $IMAGE_NEXTJS:latest
+          docker push $IMAGE_NEXTJS:$TIMESTAMP

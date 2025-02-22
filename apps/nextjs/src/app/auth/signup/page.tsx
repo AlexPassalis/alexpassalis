@@ -22,16 +22,16 @@ import {
   errorInvalidUsername,
 } from './../../../data/zod/error'
 import { authClient } from '@/lib/better-auth'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 export default function SignUpPage() {
   return <SignUpForm />
 }
 
 function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  const router = useRouter()
+  // const router = useRouter()
   const [signInEmail, setSignInEmail] = useState(false)
-  const [onRequest, setOnRequest] = useState(false)
+  const [, setOnRequest] = useState(false)
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>

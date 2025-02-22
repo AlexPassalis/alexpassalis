@@ -22,6 +22,8 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
+ENV CHOKIDAR_USEPOLLING=true
+
 CMD ["pnpm", "run", "dev"]
 
 
@@ -50,8 +52,9 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodehono
 RUN adduser --system --uid 1001 hono
 
-COPY --from=build --chown=hono:nodehono /app/build ./build
+COPY --from=build --chown=hono:nodehono /app/build ./
 
 USER hono
 ENV NODE_ENV=production
-CMD ["node", "./build/src/server.js"]
+
+CMD ["node", "server.js"]
