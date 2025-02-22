@@ -65,7 +65,7 @@ jobs:
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
-      - name: postgres (build and tag)
+      - name: image-postgres (build and tag)
         run: |
           docker build \
           -t $IMAGE_POSTGRES:latest \
@@ -76,7 +76,7 @@ jobs:
           $IMAGE_POSTGRES:latest \
           $IMAGE_POSTGRES:$TIMESTAMP
 
-      - name: redis (build and tag)
+      - name: image-redis (build and tag)
         run: |
           docker build \
           -t $IMAGE_REDIS:latest \
@@ -87,7 +87,7 @@ jobs:
           $IMAGE_REDIS:latest \
           $IMAGE_REDIS:$TIMESTAMP
 
-      - name: hono (build and tag)
+      - name: image-hono (build and tag)
         run: |
           docker build \
           -t $IMAGE_HONO:latest \
@@ -105,7 +105,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-      - name: Push all images
+      - name: Push all images to GHCR
         run: |
           docker push $IMAGE_POSTGRES:latest
           docker push $IMAGE_POSTGRES:$TIMESTAMP
