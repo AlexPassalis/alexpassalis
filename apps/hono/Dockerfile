@@ -6,7 +6,6 @@ RUN apk add --no-cache \
     make \
     g++ \
     openssl-dev \
-    openssl1.1-compat \
     && ln -sf /usr/bin/python3 /usr/bin/python
 
 
