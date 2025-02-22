@@ -4,32 +4,12 @@ networks:
     driver: bridge
 
 services:
-  dozzle:
-    image: amir20/dozzle:latest
-    container_name: container-dozzle
-    networks:
-      - app-network
-    restart: always
-    ports:
-      - '127.0.0.1:8080:8080'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
   postgres:
     image: image-postgres
-    build:
-      context: ./apps/postgres
-      dockerfile: Dockerfile
     container_name: container-postgres
     networks:
       - app-network
     restart: always
-    environment:
-      POSTGRES_DB: dev_postgres_db
-      POSTGRES_USER: dev_postgres_user
-      POSTGRES_PASSWORD: dev_postgres_password
-      POSTGRES_HOST: dev-postgres
-      POSTGRES_PORT: 5432
     healthcheck:
       test:
         [
@@ -41,94 +21,3 @@ services:
       retries: 2
     volumes:
       - ./volumes/postgresql/data:/var/lib/postgresql/data
-
-  fastify-1:
-    image: image-fastify
-    container_name: container-fastify-1
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - postgres
-    environment:
-      - PORT=4001
-
-  fastify-2:
-    image: image-fastify
-    container_name: container-fastify-2
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - postgres
-    environment:
-      - PORT=4002
-
-  next_js-1:
-    image: image-next_js
-    container_name: container-next_js-1
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - fastify-1
-      - fastify-2
-    environment:
-      - PORT=3001
-
-  next_js-2:
-    image: image-next_js
-    container_name: container-next_js-2
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - fastify-1
-      - fastify-2
-    environment:
-      - PORT=3002
-
-  nginx:
-    image: image-nginx
-    container_name: container-nginx
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - fastify-1
-      - fastify-2
-      - next_js-1
-      - next_js-2
-    ports:
-      - '443:443'
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: container-prometheus
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - fastify-1
-      - fastify-2
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=7d'
-      - '--storage.tsdb.retention.size=2.5GB'
-    ports:
-      - '127.0.0.1:9090:9090'
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./../volumes/prometheus/data:/prometheus
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: container-grafana
-    networks:
-      - app-network
-    restart: always
-    depends_on:
-      - prometheus
-    ports:
-      - '127.0.0.1:3000:3000'

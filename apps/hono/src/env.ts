@@ -1,9 +1,5 @@
-import { config } from 'dotenv-flow'
-import { expand } from 'dotenv-expand'
+import '@dotenvx/dotenvx/config'
 import { z } from 'zod'
-
-const envFile = config()
-expand(envFile)
 
 const stringBoolean = z.coerce
   .string()
