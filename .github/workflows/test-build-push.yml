@@ -102,9 +102,9 @@ jobs:
       - name: image-nextjs (build and tag)
         run: |
           docker build \
+          --build-arg NEXT_PUBLIC_BETTER_AUTH_URL=https://localhost/api/auth \
           -t $IMAGE_NEXTJS:latest \
           -f ./apps/nextjs/Dockerfile \
-          -e NEXT_PUBLIC_BETTER_AUTH_URL=https://localhost/api/auth \
           ./apps/nextjs
 
           docker tag \
