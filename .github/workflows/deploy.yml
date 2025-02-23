@@ -11,23 +11,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository into GitHub Actions runner (ubuntu VM)
-        uses: actions/checkout@v3
+      #   - name: Clone repository into GitHub Actions runner (ubuntu VM)
+      #     uses: actions/checkout@v3
 
-      - name: Copy-Paste docker-compose.yml file from github repository to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          username: ${{ secrets.VPS_USER }}
-          host: ${{ secrets.VPS_IP }}
-          passphrase: ${{ secrets.VPS_PASSPHRASE }}
-          source: './docker-compose.yml'
-          target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
+      #   - name: Copy-Paste docker-compose.yml file from github repository to VPS
+      #     uses: appleboy/scp-action@v0.1.7
+      #     with:
+      #       key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      #       username: ${{ secrets.VPS_USER }}
+      #       host: ${{ secrets.VPS_IP }}
+      #       passphrase: ${{ secrets.VPS_PASSPHRASE }}
+      #       source: './docker-compose.yml'
+      #       target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
       - name: Decrypt .env.production files
         run: |
           curl -sfS https://dotenvx.sh/install.sh | sh
-          DOTENV_PRIVATE_KEY_PRODUCTION=${{ secrets.POSTGRES_DOTENV_PRIVATE_KEY_PRODUCTION }} dotenvx decrypt -f ./apps/postgres/.env.production
+          eval "$(DOTENV_PRIVATE_KEY_PRODUCTION=${{ secrets.POSTGRES_DOTENV_PRIVATE_KEY_PRODUCTION }} dotenvx decrypt -f ./apps/postgres/.env.production --format=sh)"
 
       - name: Build Docker containers
         uses: appleboy/ssh-action@v1.2.1
@@ -40,7 +40,11 @@ jobs:
             cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose \
-            --env-file ./apps/postgres/.env.production \
+            -e POSTGRES_DB=${POSTGRES_DB} \
+            -e POSTGRES_USER=${POSTGRES_USER} \
+            -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
+            -e POSTGRES_HOST=${POSTGRES_HOST} \
+            -e POSTGRES_PORT=${POSTGRES_PORT} \
             up -d --pull always --build --remove-orphans
             docker image prune -af
             docker logout ghcr.io
