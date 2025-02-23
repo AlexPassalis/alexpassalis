@@ -1,3 +1,5 @@
+version: '2.4'
+
 networks:
   app-network:
     name: network-alexpassalis_com
@@ -9,18 +11,27 @@ services:
     container_name: container-dozzle
     networks:
       - app-network
-    restart: always
     ports:
       - '127.0.0.1:8080:8080'
+    healthcheck:
+      start_period: 10s
+      start_interval: 3s
+      test: ['CMD', '/dozzle', 'healthcheck']
+      interval: 10s
+      timeout: 5s
+      retries: 2
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   postgres:
-    image: ghcr.io/alexpassalis/image-postgres
+    depends_on:
+      dozzle:
+        condition: service_healthy
+    image: ghcr.io/alexpassalis/image-postgres:latest
     container_name: container-postgres
     networks:
       - app-network
-    restart: always
     environment:
       POSTGRES_DB: dev_postgres_db
       POSTGRES_USER: dev_postgres_user
@@ -28,13 +39,39 @@ services:
       POSTGRES_HOST: dev-postgres
       POSTGRES_PORT: 5432
     healthcheck:
+      start_period: 10s
+      start_interval: 3s
       test:
         [
           'CMD-SHELL',
           'pg_isready -h localhost -U dev_postgres_user -d dev_postgres_db',
         ]
       interval: 10s
-      timeout: 10s
+      timeout: 5s
       retries: 2
+    restart: always
     volumes:
       - ./volumes/postgresql/data:/var/lib/postgresql/data
+
+  redis:
+    depends_on:
+      dozzle:
+        condition: service_healthy
+    image: ghcr.io/alexpassalis/image-redis:latest
+    container_name: container-redis
+    networks:
+      - app-network
+    environment:
+      REDIS_PASSWORD: dev_redis_password
+    healthcheck:
+      start_period: 10s
+      start_interval: 3s
+      test:
+        [
+          'CMD-SHELL',
+          'redis-cli -h localhost -p 6379 -a dev_redis_password ping | grep PONG || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+    restart: always
