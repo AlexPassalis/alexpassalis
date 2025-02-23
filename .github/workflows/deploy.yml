@@ -39,6 +39,8 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker compose up -d --pull always --build --remove-orphans
+            docker compose \
+            --env-file ./apps/postgres/.env.production \
+            up -d --pull always --build --remove-orphans
             docker image prune -af
             docker logout ghcr.io
