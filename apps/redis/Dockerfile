@@ -1,4 +1,5 @@
 FROM redis:7.0-alpine3.17
+RUN apk add --no-cache gettext
 WORKDIR /usr/local/etc/redis
 COPY ./redis.conf .
 # Override the default entrypoint of the base image
