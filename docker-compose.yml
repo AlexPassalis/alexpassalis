@@ -4,6 +4,17 @@ networks:
     driver: bridge
 
 services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: container-dozzle
+    networks:
+      - app-network
+    restart: always
+    ports:
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   postgres:
     image: ghcr.io/alexpassalis/image-postgres
     container_name: container-postgres
