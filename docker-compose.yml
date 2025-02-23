@@ -30,12 +30,8 @@ services:
     container_name: container-postgres
     networks:
       - app-network
-    environment:
-      POSTGRES_DB: dev_postgres_db
-      POSTGRES_USER: dev_postgres_user
-      POSTGRES_PASSWORD: dev_postgres_password
-      POSTGRES_HOST: dev-postgres
-      POSTGRES_PORT: 5432
+    env_file:
+      - ./apps/postgres/.env.production
     healthcheck:
       start_period: 10s
       start_interval: 3s
