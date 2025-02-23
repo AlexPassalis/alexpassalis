@@ -57,7 +57,7 @@ jobs:
       - name: Define image environment variables
         run: |
           echo "IMAGE_POSTGRES=ghcr.io/$OWNER/image-postgres" >> $GITHUB_ENV
-          # echo "IMAGE_REDIS=ghcr.io/$OWNER/image-redis" >> $GITHUB_ENV
+          echo "IMAGE_REDIS=ghcr.io/$OWNER/image-redis" >> $GITHUB_ENV
           # echo "IMAGE_HONO=ghcr.io/$OWNER/image-hono" >> $GITHUB_ENV
           # echo "IMAGE_NEXTJS=ghcr.io/$OWNER/image-nextjs" >> $GITHUB_ENV
           # echo "IMAGE_NGINX=ghcr.io/$OWNER/image-nginx" >> $GITHUB_ENV
@@ -78,16 +78,16 @@ jobs:
           $IMAGE_POSTGRES:latest \
           $IMAGE_POSTGRES:$TIMESTAMP
 
-      # - name: image-redis (build and tag)
-      #   run: |
-      #     docker build \
-      #     -t $IMAGE_REDIS:latest \
-      #     -f ./apps/redis/Dockerfile \
-      #     ./apps/redis
+      - name: image-redis (build and tag)
+        run: |
+          docker build \
+          -t $IMAGE_REDIS:latest \
+          -f ./apps/redis/Dockerfile \
+          ./apps/redis
 
-      #     docker tag \
-      #     $IMAGE_REDIS:latest \
-      #     $IMAGE_REDIS:$TIMESTAMP
+          docker tag \
+          $IMAGE_REDIS:latest \
+          $IMAGE_REDIS:$TIMESTAMP
 
       # - name: image-hono (build and tag)
       #   run: |
@@ -135,8 +135,8 @@ jobs:
           docker push $IMAGE_POSTGRES:latest
           docker push $IMAGE_POSTGRES:$TIMESTAMP
 
-          # docker push $IMAGE_REDIS:latest
-          # docker push $IMAGE_REDIS:$TIMESTAMP
+          docker push $IMAGE_REDIS:latest
+          docker push $IMAGE_REDIS:$TIMESTAMP
 
           # docker push $IMAGE_HONO:latest
           # docker push $IMAGE_HONO:$TIMESTAMP
