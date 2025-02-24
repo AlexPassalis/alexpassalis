@@ -42,4 +42,4 @@ jobs:
             docker compose up -d --pull always --build --remove-orphans --wait
             docker image prune -af
             docker logout ghcr.io
-            rm -r ./apps
+            # rm -r ./apps
