@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "dotenvx run -f .env -f .env.development -- tsx watch ./src/server.ts",
+    "dev": "cross-env NODE_ENV=development tsx watch ./src/server.ts",
     "lint": "eslint ./src --config ./eslint.config.mjs",
     "test:dev": "cross-env NODE_ENV=test vitest --config ./vitest.config.ts",
     "test": "cross-env NODE_ENV=test vitest run --config ./vitest.config.ts",
@@ -13,12 +13,12 @@
     "postgres:migrate": "cross-env POSTGRES_MIGRATING=true drizzle-kit push --config ./drizzle.config.ts"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.37.0",
     "@hono/node-server": "^1.13.8",
-    "@hono/zod-openapi": "^0.18.4",
     "@hono/zod-validator": "^0.4.2",
     "@react-email/components": "^0.0.33",
     "better-auth": "^1.1.18",
+    "cross-env": "^7.0.3",
+    "dotenv-flow": "^4.1.0",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.6.20",
     "hono-pino": "^0.7.2",

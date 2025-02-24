@@ -1,8 +1,8 @@
 build
 node_modules
 .dockerignore
-.env
 .env.development
+.env.production
 .env.test
 .gitignore
 Dockerfile

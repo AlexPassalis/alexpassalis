@@ -49,12 +49,12 @@ RUN pnpm run build
 FROM build AS start
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodehono
-RUN adduser --system --uid 1001 hono
+RUN addgroup --system --gid 1001 grouphono
+RUN adduser --system --uid 1001 userhono
 
-COPY --from=build --chown=hono:nodehono /app/build ./
+COPY --from=build --chown=userhono:grouphono /app/build ./
 
-USER hono
+USER userhono
 ENV NODE_ENV=production
 
 CMD ["node", "server.js"]

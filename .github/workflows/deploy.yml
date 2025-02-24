@@ -24,20 +24,6 @@ jobs:
           source: './docker-compose.yml'
           target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
-      - name: Decrypt .env.production files
-        run: |
-          curl -sfS https://dotenvx.sh/install.sh | sh
-          DOTENV_PRIVATE_KEY_PRODUCTION=${{ secrets.POSTGRES_DOTENV_PRIVATE_KEY_PRODUCTION }} dotenvx decrypt -f ./apps/postgres/.env.production
-
-      - name: Read .env.production files and export variables to $GITHUB_ENV
-        uses: aarcangeli/load-dotenv@v1.1.0
-        with:
-          path: './apps/postgres'
-          filenames: '.env.production'
-          quiet: 'true'
-          if-file-not-found: 'error'
-          expand: 'false'
-
       - name: Build Docker containers
         uses: appleboy/ssh-action@v1.2.1
         with:

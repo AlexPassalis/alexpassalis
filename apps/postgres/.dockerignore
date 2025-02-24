@@ -1,6 +1,5 @@
 .dockerignore
 .env.development
-.env.keys
 .env.production
 .gitignore
 Dockerfile
