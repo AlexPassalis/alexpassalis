@@ -12,7 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository into GitHub Actions runner (ubuntu VM)
-        uses: actions/checkout@v3
+        uses: actions/checkout@master
+
+      - name: Decrypt git-crypt encrypted files
+        uses: sliteteam/github-action-git-crypt-unlock@1.3.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       - name: Copy-Paste docker-compose.yml file from github repository to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -21,24 +26,19 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           host: ${{ secrets.VPS_IP }}
           passphrase: ${{ secrets.VPS_PASSPHRASE }}
-          source: './docker-compose.yml'
+          source: './docker-compose.yml,./apps/postgres/.env.production,./apps/postgres/.env.secrets'
           target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
-      - name: Build Docker containers
-        uses: appleboy/ssh-action@v1.2.1
-        with:
-          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          username: ${{ secrets.VPS_USER }}
-          host: ${{ secrets.VPS_IP }}
-          passphrase: ${{ secrets.VPS_PASSPHRASE }}
-          script: |
-            cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
-            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            export POSTGRES_DB=$POSTGRES_DB
-            export POSTGRES_USER=$POSTGRES_USER
-            export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-            export POSTGRES_HOST=$POSTGRES_HOST
-            export POSTGRES_PORT=$POSTGRES_PORT
-            docker compose up -d --pull always --build --remove-orphans
-            docker image prune -af
-            docker logout ghcr.io
+      # - name: Build Docker containers
+      #   uses: appleboy/ssh-action@v1.2.1
+      #   with:
+      #     key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      #     username: ${{ secrets.VPS_USER }}
+      #     host: ${{ secrets.VPS_IP }}
+      #     passphrase: ${{ secrets.VPS_PASSPHRASE }}
+      #     script: |
+      #       cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
+      #       echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      #       docker compose up -d --pull always --build --remove-orphans
+      #       docker image prune -af
+      #       docker logout ghcr.io

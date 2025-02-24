@@ -3,6 +3,10 @@ networks:
     name: network-alexpassalis_com
     driver: bridge
 
+secrets:
+  secrets-postgres:
+    file: ./apps/postgres/.env.secrets
+
 services:
   dozzle:
     image: amir20/dozzle:latest
@@ -30,12 +34,14 @@ services:
     container_name: container-postgres
     networks:
       - app-network
+    env_file:
+      - ./apps/postgres/.env.production
+    secrets:
+      - secrets-postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB_FILE: /run/secrets/secrets-postgres
+      POSTGRES_USER_FILE: /run/secrets/secrets-postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/secrets-postgres
     healthcheck:
       start_period: 10s
       start_interval: 3s

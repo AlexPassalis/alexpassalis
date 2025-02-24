@@ -1,1 +1,2 @@
-apps/*/.env.production filter=git-crypt diff=git-crypt
+.env.production filter=git-crypt diff=git-crypt
+.env.secrets filter=git-crypt diff=git-crypt
