@@ -40,11 +40,11 @@ jobs:
 
       - name: Build Docker containers
         env:
-          POSTGRES_DB: ${POSTGRES_DB}
-          POSTGRES_USER: ${POSTGRES_USER}
-          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-          POSTGRES_HOST: ${POSTGRES_HOST}
-          POSTGRES_PORT: ${POSTGRES_PORT}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
         uses: appleboy/ssh-action@v1.2.1
         with:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
