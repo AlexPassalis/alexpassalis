@@ -39,12 +39,6 @@ jobs:
           expand: 'false'
 
       - name: Build Docker containers
-        env:
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
-          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
         uses: appleboy/ssh-action@v1.2.1
         with:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
@@ -54,6 +48,11 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            export $POSTGRES_DB
+            export $POSTGRES_USER
+            export $POSTGRES_PASSWORD
+            export $POSTGRES_HOST
+            export $POSTGRES_PORT
             docker compose up -d --pull always --build --remove-orphans
             docker image prune -af
             docker logout ghcr.io
