@@ -55,7 +55,7 @@ services:
       retries: 2
     restart: always
     volumes:
-      - ./volumes/postgresql/data:/var/lib/postgresql/data
+      - ./../volumes/postgresql/data:/var/lib/postgresql/data
 
   redis:
     depends_on:
