@@ -16,7 +16,7 @@ services:
     ports:
       - '127.0.0.1:8080:8080'
     healthcheck:
-      start_period: 10s
+      start_period: 30s
       start_interval: 3s
       test: ['CMD', '/dozzle', 'healthcheck']
       interval: 10s
@@ -43,7 +43,7 @@ services:
       POSTGRES_USER_FILE: /run/secrets/secrets-postgres
       POSTGRES_PASSWORD_FILE: /run/secrets/secrets-postgres
     healthcheck:
-      start_period: 10s
+      start_period: 30s
       start_interval: 3s
       test:
         [
@@ -68,7 +68,7 @@ services:
     environment:
       REDIS_PASSWORD: dev_redis_password
     healthcheck:
-      start_period: 10s
+      start_period: 30s
       start_interval: 3s
       test:
         [
