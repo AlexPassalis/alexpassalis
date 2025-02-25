@@ -1,14 +1,18 @@
-networks:
-  app-network:
-    name: network-alexpassalis_com
-    driver: bridge
-
 secrets:
-  secrets-postgres:
-    file: ./apps/postgres/.env.secrets
+  POSTGRES_DB:
+    external: true
+  POSTGRES_USER:
+    external: true
+  POSTGRES_PASSWORD:
+    external: true
+  REDIS_PASSWORD:
+    external: true
 
 services:
   dozzle:
+    deploy:
+      update_config:
+        order: start-first
     image: amir20/dozzle:latest
     container_name: container-dozzle
     networks:
@@ -17,7 +21,7 @@ services:
       - '127.0.0.1:8080:8080'
     healthcheck:
       start_period: 30s
-      start_interval: 3s
+      start_interval: 5s
       test: ['CMD', '/dozzle', 'healthcheck']
       interval: 10s
       timeout: 5s
@@ -27,6 +31,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   postgres:
+    deploy:
+      update_config:
+        order: start-first
     depends_on:
       dozzle:
         condition: service_healthy
@@ -37,18 +44,20 @@ services:
     env_file:
       - ./apps/postgres/.env.production
     secrets:
-      - secrets-postgres
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     environment:
-      POSTGRES_DB_FILE: /run/secrets/secrets-postgres
-      POSTGRES_USER_FILE: /run/secrets/secrets-postgres
-      POSTGRES_PASSWORD_FILE: /run/secrets/secrets-postgres
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
     healthcheck:
       start_period: 30s
-      start_interval: 3s
+      start_interval: 5s
       test:
         [
           'CMD-SHELL',
-          'pg_isready -h localhost -U dev_postgres_user -d dev_postgres_db',
+          'pg_isready -d $(cat /run/secrets/POSTGRES_DB) -U $(cat /run/secrets/POSTGRES_USER)',
         ]
       interval: 10s
       timeout: 5s
@@ -58,6 +67,9 @@ services:
       - ./../volumes/postgresql/data:/var/lib/postgresql/data
 
   redis:
+    deploy:
+      update_config:
+        order: start-first
     depends_on:
       dozzle:
         condition: service_healthy
@@ -65,15 +77,15 @@ services:
     container_name: container-redis
     networks:
       - app-network
-    environment:
-      REDIS_PASSWORD: dev_redis_password
+    secrets:
+      - REDIS_PASSWORD
     healthcheck:
       start_period: 30s
-      start_interval: 3s
+      start_interval: 5s
       test:
         [
           'CMD-SHELL',
-          'redis-cli -h localhost -p 6379 -a dev_redis_password ping | grep PONG || exit 1',
+          'redis-cli -h localhost -p 6379 -a $(cat /run/secrets/REDIS_PASSWORD) ping | grep PONG || exit 1',
         ]
       interval: 10s
       timeout: 5s

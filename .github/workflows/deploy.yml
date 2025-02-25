@@ -19,17 +19,17 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: Copy-paste docker-compose.yml, .env.production and .env.secrets files from github repository to VPS
+      - name: Copy-paste files from github repository to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           username: ${{ secrets.VPS_USER }}
           host: ${{ secrets.VPS_IP }}
           passphrase: ${{ secrets.VPS_PASSPHRASE }}
-          source: './docker-compose.yml,./apps/postgres/.env.production,./apps/postgres/.env.secrets'
+          source: './docker-stack.yaml,./apps/postgres/.env.production,./apps/redis/redis.conf'
           target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
-      - name: Build Docker containers
+      - name: Build Docker stack
         uses: appleboy/ssh-action@v1.2.1
         with:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
@@ -39,7 +39,6 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker compose up -d --pull always --build --remove-orphans --wait
-            docker image prune -af
+            docker stack deploy -c ./docker-stack.yaml stack-alexpassalis_com --with-registry-auth --wait
             docker logout ghcr.io
             # rm -r ./apps
