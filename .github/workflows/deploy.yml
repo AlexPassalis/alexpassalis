@@ -39,5 +39,5 @@ jobs:
           script: |
             cd /home/${{ secrets.VPS_USER }}/alexpassalis_com
             echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker stack deploy -c docker-stack.yaml -d false --with-registry-auth stack-alexpassalis_com
+            docker stack deploy -c ./docker-stack.yaml -d --with-registry-auth stack-alexpassalis_com
             docker logout ghcr.io
