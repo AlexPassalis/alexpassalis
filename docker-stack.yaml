@@ -127,8 +127,8 @@ services:
       - postgres
       - redis
     image: ghcr.io/alexpassalis/image-hono:latest
-    env_file:
-      - ./apps/hono/.env.production
+    volumes:
+      - ./apps/hono/.env.production:/app/.env.production:ro
     secrets:
       - POSTGRES_URL
       - REDIS_PASSWORD
@@ -137,14 +137,6 @@ services:
       - GOOGLE_CLIENT_SECRET
       - NODEMAILER_AUTH_USER
       - NODEMAILER_AUTH_PASS
-    environment:
-      POSTGRES_URL: /run/secrets/POSTGRES_URL
-      REDIS_PASSWORD: /run/secrets/REDIS_PASSWORD
-      HONO_BETTER_AUTH_SECRET: /run/secrets/HONO_BETTER_AUTH_SECRET
-      GOOGLE_CLIENT_ID: /run/secrets/GOOGLE_CLIENT_ID
-      GOOGLE_CLIENT_SECRET: /run/secrets/GOOGLE_CLIENT_SECRET
-      NODEMAILER_AUTH_USER: /run/secrets/NODEMAILER_AUTH_USER
-      NODEMAILER_AUTH_PASS: /run/secrets/NODEMAILER_AUTH_PASS
     ports:
       - '4000:4000'
     healthcheck:

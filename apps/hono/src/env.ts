@@ -1,7 +1,15 @@
 import dotenvFlow from 'dotenv-flow'
+import fs from 'fs'
 import { z } from 'zod'
 
 dotenvFlow.config()
+
+function readSecret(secret: string) {
+  const secretPath = `/run/secrets/${secret}`
+  return fs.existsSync(secretPath)
+    ? fs.readFileSync(secretPath, 'utf-8').trim()
+    : undefined
+}
 
 const stringBoolean = z.coerce
   .string()
@@ -27,7 +35,7 @@ const expectedSchemaTypes = {} as {
   nodemailer_port: ReturnType<typeof z.coerce.number> | z.ZodUndefined
   nodemailer_secure: ReturnType<typeof z.coerce.boolean> | z.ZodUndefined
   postgres_url: z.ZodString | z.ZodUndefined
-  postgres_migrating: typeof stringBoolean
+  postgres_migrating: typeof stringBoolean | z.ZodUndefined
   redis_password: z.ZodString | z.ZodUndefined
   hono_better_auth_secret: z.ZodString
   google_client_id: z.ZodString | z.ZodUndefined
@@ -44,6 +52,7 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.hono_port = z.coerce.number()
     expectedSchemaTypes.hono_nextjs_origin = z.string()
     expectedSchemaTypes.hono_better_auth_url = z.string()
+    expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_host = z.string()
     expectedSchemaTypes.redis_port = z.coerce.number()
     expectedSchemaTypes.nodemailer_host = z.string()
@@ -51,7 +60,6 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.nodemailer_secure = z.coerce.boolean()
 
     expectedSchemaTypes.postgres_url = z.string()
-    expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_password = z.string()
     expectedSchemaTypes.hono_better_auth_secret = z.string()
     expectedSchemaTypes.google_client_id = z.string()
@@ -69,7 +77,7 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.hono_better_auth_secret = z.string()
 
     expectedSchemaTypes.postgres_url = z.undefined()
-    expectedSchemaTypes.postgres_migrating = stringBoolean
+    expectedSchemaTypes.postgres_migrating = z.undefined()
     expectedSchemaTypes.redis_host = z.undefined()
     expectedSchemaTypes.redis_port = z.undefined()
     expectedSchemaTypes.redis_password = z.undefined()
@@ -89,6 +97,7 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.hono_port = z.coerce.number()
     expectedSchemaTypes.hono_nextjs_origin = z.string()
     expectedSchemaTypes.hono_better_auth_url = z.string()
+    expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_host = z.string()
     expectedSchemaTypes.redis_port = z.coerce.number()
     expectedSchemaTypes.nodemailer_host = z.string()
@@ -96,7 +105,6 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.nodemailer_secure = z.coerce.boolean()
 
     expectedSchemaTypes.postgres_url = z.string()
-    expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_password = z.string()
     expectedSchemaTypes.hono_better_auth_secret = z.string()
     expectedSchemaTypes.google_client_id = z.string()
@@ -116,6 +124,7 @@ const envSchema = z.object({
   HONO_PORT: expectedSchemaTypes.hono_port,
   HONO_NEXTJS_ORIGIN: expectedSchemaTypes.hono_nextjs_origin,
   HONO_BETTER_AUTH_URL: expectedSchemaTypes.hono_better_auth_url,
+  POSTGRES_MIGRATING: expectedSchemaTypes.postgres_migrating,
   REDIS_HOST: expectedSchemaTypes.redis_host,
   REDIS_PORT: expectedSchemaTypes.redis_port,
   NODEMAILER_HOST: expectedSchemaTypes.nodemailer_host,
@@ -123,7 +132,6 @@ const envSchema = z.object({
   NODEMAILER_SECURE: expectedSchemaTypes.nodemailer_secure,
 
   POSTGRES_URL: expectedSchemaTypes.postgres_url,
-  POSTGRES_MIGRATING: expectedSchemaTypes.postgres_migrating,
   REDIS_PASSWORD: expectedSchemaTypes.redis_password,
   HONO_BETTER_AUTH_SECRET: expectedSchemaTypes.hono_better_auth_secret,
   GOOGLE_CLIENT_ID: expectedSchemaTypes.google_client_id,
@@ -139,20 +147,20 @@ const { error, data } = envSchema.safeParse({
   HONO_PORT: process.env.HONO_PORT,
   HONO_NEXTJS_ORIGIN: process.env.HONO_NEXTJS_ORIGIN,
   HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
+  POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
   NODEMAILER_HOST: process.env.NODEMAILER_HOST,
   NODEMAILER_PORT: process.env.NODEMAILER_PORT,
   NODEMAILER_SECURE: process.env.NODEMAILER_SECURE,
 
-  POSTGRES_URL: process.env.POSTGRES_URL,
-  POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,
-  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
-  HONO_BETTER_AUTH_SECRET: process.env.HONO_BETTER_AUTH_SECRET,
-  NODEMAILER_AUTH_USER: process.env.NODEMAILER_AUTH_USER,
-  NODEMAILER_AUTH_PASS: process.env.NODEMAILER_AUTH_PASS,
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  POSTGRES_URL: readSecret('POSTGRES_URL'),
+  REDIS_PASSWORD: readSecret('REDIS_PASSWORD'),
+  HONO_BETTER_AUTH_SECRET: readSecret('HONO_BETTER_AUTH_SECRET'),
+  NODEMAILER_AUTH_USER: readSecret('NODEMAILER_AUTH_USER'),
+  NODEMAILER_AUTH_PASS: readSecret('NODEMAILER_AUTH_PASS'),
+  GOOGLE_CLIENT_ID: readSecret('GOOGLE_CLIENT_ID'),
+  GOOGLE_CLIENT_SECRET: readSecret('GOOGLE_CLIENT_SECRET'),
 })
 
 if (error) {
