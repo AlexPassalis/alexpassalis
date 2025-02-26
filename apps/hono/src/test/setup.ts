@@ -31,7 +31,8 @@ let serverTest: Server
 const timeout = 60_000
 
 if (process.env.NODE_ENV !== 'test') {
-  throw new Error('NODE_ENV must be "test"')
+  console.error('NODE_ENV must be "test"')
+  process.exit(1)
 }
 
 beforeAll(async () => {
