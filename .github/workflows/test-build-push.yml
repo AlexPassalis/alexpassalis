@@ -29,7 +29,7 @@ jobs:
           docker run --rm \
             --name container-hono-test \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            --env-file ./apps/hono/.env.test \
+            -v ./apps/hono/.env.test:/var/.env.test:ro \
             image-hono-test
 
   Build-And-Push:

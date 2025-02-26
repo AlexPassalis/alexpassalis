@@ -35,7 +35,7 @@ const expectedSchemaTypes = {} as {
   nodemailer_port: ReturnType<typeof z.coerce.number> | z.ZodUndefined
   nodemailer_secure: ReturnType<typeof z.coerce.boolean> | z.ZodUndefined
   postgres_url: z.ZodString | z.ZodUndefined
-  postgres_migrating: typeof stringBoolean | z.ZodUndefined
+  postgres_migrating: typeof stringBoolean
   redis_password: z.ZodString | z.ZodUndefined
   hono_better_auth_secret: z.ZodString
   google_client_id: z.ZodString | z.ZodUndefined
@@ -77,7 +77,7 @@ switch (process.env.NODE_ENV) {
     expectedSchemaTypes.hono_better_auth_secret = z.string()
 
     expectedSchemaTypes.postgres_url = z.undefined()
-    expectedSchemaTypes.postgres_migrating = z.undefined()
+    expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_host = z.undefined()
     expectedSchemaTypes.redis_port = z.undefined()
     expectedSchemaTypes.redis_password = z.undefined()
