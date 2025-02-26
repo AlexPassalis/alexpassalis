@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker'
 
 describe('/api/auth', () => {
   const authClient = createAuthClient({
-    baseURL: `http://localhost:${env.HONO_PORT}/api/auth`,
+    baseURL: `http://localhost:${env.PORT}/api/auth`,
     plugins: [emailOTPClient()],
   })
 
