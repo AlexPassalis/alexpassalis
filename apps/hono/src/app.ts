@@ -1,6 +1,6 @@
 import { Postgres, postgresPing } from '@/lib/postgres/index'
 import Redis from 'ioredis'
-import { redisPing } from './lib/redis'
+import { redisPing } from '@/lib/redis/index'
 import newHono from '@/config/newHono'
 import { pinoLogger } from '@/config/logger'
 import { cors } from 'hono/cors'
