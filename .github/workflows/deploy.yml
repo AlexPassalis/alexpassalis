@@ -29,7 +29,7 @@ jobs:
           source: './docker-stack.yaml,./apps/postgres/.env.production,./apps/redis/redis.conf'
           target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
-      - name: Build Docker stack
+      - name: Docker stack deploy
         uses: appleboy/ssh-action@v1.2.1
         with:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
