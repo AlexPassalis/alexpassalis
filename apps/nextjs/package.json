@@ -1,6 +1,6 @@
 {
-  "name": "nextjs",
   "private": true,
+  "name": "nextjs",
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev",
     "lint": "next lint",

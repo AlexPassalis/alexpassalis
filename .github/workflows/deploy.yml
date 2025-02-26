@@ -8,7 +8,7 @@ permissions:
   packages: read
 
 jobs:
-  deploy:
+  Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository into GitHub Actions runner (ubuntu VM)

@@ -54,8 +54,6 @@ services:
       update_config:
         order: start-first
         failure_action: rollback
-    depends_on:
-      - dozzle
     image: ghcr.io/alexpassalis/image-postgres:latest
     env_file:
       - ./apps/postgres/.env.production
@@ -88,8 +86,6 @@ services:
       update_config:
         order: start-first
         failure_action: rollback
-    depends_on:
-      - dozzle
     image: redis:7.0-alpine3.17
     volumes:
       - ./apps/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
@@ -127,9 +123,6 @@ services:
         failure_action: rollback
       mode: replicated
       replicas: 2
-    depends_on:
-      - postgres
-      - redis
     image: ghcr.io/alexpassalis/image-hono:latest
     volumes:
       - ./apps/hono/.env.production:/app/.env.production:ro
@@ -141,14 +134,34 @@ services:
       - GOOGLE_CLIENT_SECRET
       - NODEMAILER_AUTH_USER
       - NODEMAILER_AUTH_PASS
-    ports:
-      - '4000:4000'
     healthcheck:
+      start_period: 30s
+      start_interval: 5s
       test:
         [
           'CMD-SHELL',
           'curl -f http://localhost:4000/api/healthcheck | grep ok || exit 1',
         ]
       interval: 10s
-      timeout: 10s
+      timeout: 5s
+      retries: 2
+
+  nextjs:
+    deploy:
+      restart_policy:
+        condition: any
+      update_config:
+        order: start-first
+        failure_action: rollback
+      mode: replicated
+      replicas: 2
+    image: ghcr.io/alexpassalis/image-nextjs:latest
+    volumes:
+      - ./apps/nextjs/.env.production:/app/.env.production:ro
+    healthcheck:
+      start_period: 30s
+      start_interval: 5s
+      test: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1']
+      interval: 10s
+      timeout: 5s
       retries: 2
