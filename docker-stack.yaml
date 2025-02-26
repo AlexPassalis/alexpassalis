@@ -31,6 +31,7 @@ services:
         condition: any
       update_config:
         order: start-first
+        failure_action: rollback
     image: amir20/dozzle:latest
     environment:
       - DOZZLE_NO_ANALYTICS=true
@@ -52,6 +53,7 @@ services:
         condition: any
       update_config:
         order: start-first
+        failure_action: rollback
     depends_on:
       - dozzle
     image: ghcr.io/alexpassalis/image-postgres:latest
@@ -85,6 +87,7 @@ services:
         condition: any
       update_config:
         order: start-first
+        failure_action: rollback
     depends_on:
       - dozzle
     image: redis:7.0-alpine3.17
@@ -121,6 +124,7 @@ services:
         condition: any
       update_config:
         order: start-first
+        failure_action: rollback
       mode: replicated
       replicas: 2
     depends_on:
