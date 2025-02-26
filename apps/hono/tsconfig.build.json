@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build"
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
+  },
+  "exclude": [
+    "./src/test",
+    "./src/lib/better-auth/schema.ts",
+    "./src/api/api.test.ts",
+    "./src/api/auth/auth.test.ts"
+  ]
+}
