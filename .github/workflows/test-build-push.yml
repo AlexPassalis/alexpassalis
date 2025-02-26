@@ -8,7 +8,7 @@ permissions:
   packages: write
 
 jobs:
-  test:
+  Test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository into GitHub Actions runner (ubuntu VM)
@@ -32,8 +32,8 @@ jobs:
             --env-file ./apps/hono/.env.test \
             image-hono-test
 
-  build-and-push:
-    needs: test
+  Build-And-Push:
+    needs: Test
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository into GitHub Actions runner (ubuntu VM)

@@ -1,12 +1,13 @@
 {
-  "name": "hono",
   "private": true,
+  "name": "hono",
+  "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch ./src/server.ts",
     "lint": "eslint ./src --config ./eslint.config.mjs",
-    "test:dev": "cross-env NODE_ENV=test vitest --config ./vitest.config.mts",
-    "test": "cross-env NODE_ENV=test vitest run --config ./vitest.config.mts",
-    "build": "cross-env NODE_ENV=production tsc -p tsconfig.build.json",
+    "test:dev": "cross-env NODE_ENV=test vitest --config ./vitest.config.ts",
+    "test": "cross-env NODE_ENV=test vitest run --config ./vitest.config.ts",
+    "build": "cross-env NODE_ENV=production tsc && tsc-alias",
     "better-auth:generate": "cross-env NODE_ENV=development npx @better-auth/cli generate --config ./src/lib/better-auth/schema.ts --output ./src/api/auth/auth.schema.ts",
     "postgres:generate": "cross-env NODE_ENV=development drizzle-kit generate --config ./drizzle.config.ts",
     "postgres:migrate": "cross-env POSTGRES_MIGRATING=true drizzle-kit push --config ./drizzle.config.ts"
@@ -42,6 +43,7 @@
     "drizzle-kit": "^0.30.4",
     "eslint": "^9.20.1",
     "globals": "^15.15.0",
+    "tsc-alias": "^1.8.11",
     "tsx": "^4.7.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.0",
