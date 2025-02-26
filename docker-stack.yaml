@@ -6,6 +6,8 @@ services:
       update_config:
         order: start-first
     image: amir20/dozzle:latest
+    environment:
+      - DOZZLE_NO_ANALYTICS=true
     ports:
       - '8080:8080'
     healthcheck:
@@ -59,7 +61,20 @@ services:
         order: start-first
     depends_on:
       - dozzle
-    image: ghcr.io/alexpassalis/image-redis:latest
+    image: redis:7.0-alpine3.17
+    volumes:
+      - ./apps/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis:/data
+    command:
+      [
+        'redis-server',
+        '/usr/local/etc/redis/redis.conf',
+        '--save',
+        '60',
+        '1',
+        '--loglevel',
+        'notice',
+      ]
     secrets:
       - REDIS_PASSWORD
     healthcheck:
@@ -76,6 +91,7 @@ services:
 
 volumes:
   postgres:
+  redis:
 
 secrets:
   POSTGRES_DB:
