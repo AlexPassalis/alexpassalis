@@ -111,7 +111,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-      - name: Push all images to GHCR
+      - name: Push images to GHCR
         run: |
           docker push $IMAGE_POSTGRES:latest
           docker push $IMAGE_POSTGRES:$TIMESTAMP
