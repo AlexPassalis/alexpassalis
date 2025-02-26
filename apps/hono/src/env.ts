@@ -21,14 +21,14 @@ const expectedSchemaTypes = {} as {
     | z.ZodLiteral<'development'>
     | z.ZodLiteral<'test'>
     | z.ZodLiteral<'production'>
-  hono_log_level:
+  hostname: z.ZodString
+  port: z.ZodNumber
+  log_level:
     | z.ZodLiteral<'debug'>
     | z.ZodLiteral<'silent'>
     | z.ZodLiteral<'info'>
-  hono_hostname: z.ZodString
-  hono_port: z.ZodNumber
-  hono_nextjs_origin: z.ZodString
-  hono_better_auth_url: z.ZodString
+  nextjs_origin: z.ZodString
+  better_auth_url: z.ZodString
   redis_host: z.ZodString | z.ZodUndefined
   redis_port: ReturnType<typeof z.coerce.number> | z.ZodUndefined
   nodemailer_host: z.ZodString | z.ZodUndefined
@@ -47,11 +47,11 @@ const expectedSchemaTypes = {} as {
 switch (process.env.NODE_ENV) {
   case 'development':
     expectedSchemaTypes.node_env = z.literal('development')
-    expectedSchemaTypes.hono_log_level = z.literal('debug')
-    expectedSchemaTypes.hono_hostname = z.string()
-    expectedSchemaTypes.hono_port = z.coerce.number()
-    expectedSchemaTypes.hono_nextjs_origin = z.string()
-    expectedSchemaTypes.hono_better_auth_url = z.string()
+    expectedSchemaTypes.hostname = z.string()
+    expectedSchemaTypes.port = z.coerce.number()
+    expectedSchemaTypes.log_level = z.literal('debug')
+    expectedSchemaTypes.nextjs_origin = z.string()
+    expectedSchemaTypes.better_auth_url = z.string()
     expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_host = z.string()
     expectedSchemaTypes.redis_port = z.coerce.number()
@@ -69,11 +69,11 @@ switch (process.env.NODE_ENV) {
     break
   case 'test':
     expectedSchemaTypes.node_env = z.literal('test')
-    expectedSchemaTypes.hono_log_level = z.literal('silent')
-    expectedSchemaTypes.hono_hostname = z.string()
-    expectedSchemaTypes.hono_port = z.coerce.number()
-    expectedSchemaTypes.hono_nextjs_origin = z.string()
-    expectedSchemaTypes.hono_better_auth_url = z.string()
+    expectedSchemaTypes.hostname = z.string()
+    expectedSchemaTypes.port = z.coerce.number()
+    expectedSchemaTypes.log_level = z.literal('silent')
+    expectedSchemaTypes.nextjs_origin = z.string()
+    expectedSchemaTypes.better_auth_url = z.string()
     expectedSchemaTypes.hono_better_auth_secret = z.string()
 
     expectedSchemaTypes.postgres_url = z.undefined()
@@ -92,11 +92,11 @@ switch (process.env.NODE_ENV) {
     break
   case 'production':
     expectedSchemaTypes.node_env = z.literal('production')
-    expectedSchemaTypes.hono_log_level = z.literal('info')
-    expectedSchemaTypes.hono_hostname = z.string()
-    expectedSchemaTypes.hono_port = z.coerce.number()
-    expectedSchemaTypes.hono_nextjs_origin = z.string()
-    expectedSchemaTypes.hono_better_auth_url = z.string()
+    expectedSchemaTypes.hostname = z.string()
+    expectedSchemaTypes.port = z.coerce.number()
+    expectedSchemaTypes.log_level = z.literal('info')
+    expectedSchemaTypes.nextjs_origin = z.string()
+    expectedSchemaTypes.better_auth_url = z.string()
     expectedSchemaTypes.postgres_migrating = stringBoolean
     expectedSchemaTypes.redis_host = z.string()
     expectedSchemaTypes.redis_port = z.coerce.number()
@@ -119,11 +119,11 @@ switch (process.env.NODE_ENV) {
 
 const envSchema = z.object({
   NODE_ENV: expectedSchemaTypes.node_env,
-  HONO_LOG_LEVEL: expectedSchemaTypes.hono_log_level,
-  HONO_HOSTNAME: expectedSchemaTypes.hono_hostname,
-  HONO_PORT: expectedSchemaTypes.hono_port,
-  HONO_NEXTJS_ORIGIN: expectedSchemaTypes.hono_nextjs_origin,
-  HONO_BETTER_AUTH_URL: expectedSchemaTypes.hono_better_auth_url,
+  HOSTNAME: expectedSchemaTypes.hostname,
+  PORT: expectedSchemaTypes.port,
+  LOG_LEVEL: expectedSchemaTypes.log_level,
+  NEXTJS_ORIGIN: expectedSchemaTypes.nextjs_origin,
+  BETTER_AUTH_URL: expectedSchemaTypes.better_auth_url,
   POSTGRES_MIGRATING: expectedSchemaTypes.postgres_migrating,
   REDIS_HOST: expectedSchemaTypes.redis_host,
   REDIS_PORT: expectedSchemaTypes.redis_port,
@@ -142,11 +142,11 @@ const envSchema = z.object({
 
 const { error, data } = envSchema.safeParse({
   NODE_ENV: process.env.NODE_ENV,
-  HONO_LOG_LEVEL: process.env.HONO_LOG_LEVEL,
-  HONO_HOSTNAME: process.env.HONO_HOSTNAME,
-  HONO_PORT: process.env.HONO_PORT,
-  HONO_NEXTJS_ORIGIN: process.env.HONO_NEXTJS_ORIGIN,
-  HONO_BETTER_AUTH_URL: process.env.HONO_BETTER_AUTH_URL,
+  HOSTNAME: process.env.HOSTNAME,
+  PORT: process.env.PORT,
+  LOG_LEVEL: process.env.LOG_LEVEL,
+  NEXTJS_ORIGIN: process.env.NEXTJS_ORIGIN,
+  BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
   POSTGRES_MIGRATING: process.env.POSTGRES_MIGRATING,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,

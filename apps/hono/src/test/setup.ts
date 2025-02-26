@@ -54,8 +54,8 @@ beforeAll(async () => {
     nodemailerAccountTest.smtp.secure,
     nodemailerAccountTest.user,
     nodemailerAccountTest.pass,
-    env.HONO_HOSTNAME,
-    env.HONO_PORT
+    env.HOSTNAME,
+    env.PORT
   )
 
   postgresTest = server.postgres

@@ -20,9 +20,9 @@ export default function newBetterAuth(
   transporter: Transporter
 ) {
   const auth = betterAuth({
-    baseURL: env.HONO_BETTER_AUTH_URL,
+    baseURL: env.BETTER_AUTH_URL,
     secret: env.HONO_BETTER_AUTH_SECRET,
-    trustedOrigins: [env.HONO_NEXTJS_ORIGIN],
+    trustedOrigins: [env.NEXTJS_ORIGIN],
     onAPIError: {
       onError: e => {
         logger.error({ err: e }, errorBetterAuth)

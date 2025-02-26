@@ -134,6 +134,9 @@ services:
       - GOOGLE_CLIENT_SECRET
       - NODEMAILER_AUTH_USER
       - NODEMAILER_AUTH_PASS
+    environment:
+      HOSTNAME: 0.0.0.0
+      PORT: 4000
     healthcheck:
       start_period: 30s
       start_interval: 5s
@@ -158,6 +161,9 @@ services:
     image: ghcr.io/alexpassalis/image-nextjs:latest
     volumes:
       - ./apps/nextjs/.env.production:/app/.env.production:ro
+    environment:
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
     healthcheck:
       start_period: 30s
       start_interval: 5s

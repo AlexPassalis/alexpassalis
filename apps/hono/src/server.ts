@@ -87,7 +87,7 @@ if (process.env.NODE_ENV !== 'test') {
     env.NODEMAILER_SECURE!,
     env.NODEMAILER_AUTH_USER!,
     env.NODEMAILER_AUTH_PASS!,
-    env.HONO_HOSTNAME,
-    env.HONO_PORT
+    env.HOSTNAME,
+    env.PORT
   )
 }

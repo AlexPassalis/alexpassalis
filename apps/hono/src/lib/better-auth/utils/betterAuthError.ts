@@ -10,9 +10,8 @@ export default function betterAuthError(
   e?: unknown
 ) {
   const errId = uuid()
-  const pathname = new URL(
-    request?.url || `${env.HONO_BETTER_AUTH_URL}/unknown`
-  ).pathname
+  const pathname = new URL(request?.url || `${env.BETTER_AUTH_URL}/unknown`)
+    .pathname
 
   if (e) {
     logger.error(
