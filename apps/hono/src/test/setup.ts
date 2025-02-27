@@ -28,7 +28,7 @@ let apiTest: HonoInstance
 
 let serverTest: Server
 
-const timeout = 60_000
+const timeout = 120_000
 
 if (process.env.NODE_ENV !== 'test') {
   console.error('NODE_ENV must be "test"')

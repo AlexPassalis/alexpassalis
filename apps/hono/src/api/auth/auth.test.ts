@@ -2,6 +2,7 @@ import { describe, test, expect } from 'vitest'
 import { createAuthClient } from 'better-auth/react'
 import env from '@/env'
 import { emailOTPClient } from 'better-auth/client/plugins'
+import { nodemailerTest, emailInfoTest } from '@/test/setup'
 import { faker } from '@faker-js/faker'
 
 describe('/api/auth', () => {
@@ -48,7 +49,6 @@ describe('/api/auth', () => {
         },
       }
     )
+    console.log(nodemailerTest.getTestMessageUrl(emailInfoTest!))
   })
 })
-
-// nodemailerTest.getTestMessageUrl()
