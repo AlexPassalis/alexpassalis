@@ -1,3 +1,6 @@
 CI/CD pipeline:
-  - Build Docker Images
-  - 
+
+- Test Docker images
+- Build Docker images
+- Push Docker images to GHCR
+- Deploy to VPS

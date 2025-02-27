@@ -47,7 +47,6 @@ jobs:
           echo "IMAGE_POSTGRES=ghcr.io/$OWNER/image-postgres" >> $GITHUB_ENV
           echo "IMAGE_HONO=ghcr.io/$OWNER/image-hono" >> $GITHUB_ENV
           echo "IMAGE_NEXTJS=ghcr.io/$OWNER/image-nextjs" >> $GITHUB_ENV
-          # echo "IMAGE_NGINX=ghcr.io/$OWNER/image-nginx" >> $GITHUB_ENV
 
       - name: image-postgres (build and tag)
         run: |
@@ -74,7 +73,6 @@ jobs:
       - name: image-nextjs (build and tag)
         run: |
           docker build \
-          --build-arg NEXT_PUBLIC_BETTER_AUTH_URL=https://localhost/api/auth \
           -t $IMAGE_NEXTJS:latest \
           -f ./apps/nextjs/Dockerfile \
           ./apps/nextjs
@@ -82,17 +80,6 @@ jobs:
           docker tag \
           $IMAGE_NEXTJS:latest \
           $IMAGE_NEXTJS:${{ github.sha }}
-
-      # - name: image-nginx (build and tag)
-      #   run: |
-      #     docker build \
-      #     -t $IMAGE_NGINX:latest \
-      #     -f ./apps/nginx/Dockerfile \
-      #     ./apps/nginx
-
-      #     docker tag \
-      #     $IMAGE_NGINX:latest \
-      #     $IMAGE_NGINX:${{ github.sha }}
 
       - name: Log in to GHCR
         uses: docker/login-action@v2
@@ -111,6 +98,3 @@ jobs:
 
           docker push $IMAGE_NEXTJS:latest
           docker push $IMAGE_NEXTJS:${{ github.sha }}
-
-          # docker push $IMAGE_NGINX:latest
-          # docker push $IMAGE_NGINX:${{ github.sha }}
