@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           host: ${{ secrets.VPS_IP }}
           passphrase: ${{ secrets.VPS_PASSPHRASE }}
-          source: './docker-stack.yaml,./apps/postgres/.env.production,./apps/redis/redis.conf,./apps/hono/.env.production,./apps/nextjs/.env.production,./apps/nginx/certs,./apps/nginx/nginx.conf'
+          source: './docker-stack.yaml,./apps/postgres/.env.production,./apps/redis/redis.conf,./apps/hono/.env.production,./apps/nextjs/.env.production,./apps/nginx/certs,./apps/nginx/cloudflare.conf,./apps/nginx/nginx.conf'
           target: '/home/${{ secrets.VPS_USER }}/alexpassalis_com/'
 
       - name: Docker stack deploy
