@@ -143,7 +143,7 @@ services:
       test:
         [
           'CMD-SHELL',
-          'curl -f http://localhost:4000/api/healthcheck | grep ok || exit 1',
+          'curl -f http://localhost:4000/api/hono | grep ok || exit 1',
         ]
       interval: 10s
       timeout: 5s
@@ -167,7 +167,11 @@ services:
     healthcheck:
       start_period: 30s
       start_interval: 5s
-      test: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1']
+      test:
+        [
+          'CMD-SHELL',
+          'curl -f http://localhost:3000/api/nextjs | grep ok || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 2

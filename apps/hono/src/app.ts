@@ -20,15 +20,16 @@ export default async function appBuildUp(
 
   const api = newHono().basePath('/api')
   api.use(pinoLogger())
+
+  api.get('/hono', c => {
+    return c.text('ok', 200)
+  })
+
   api.use('*', cors(corsOptions))
   api.use('*', async (c, next) => {
     c.env.postgres = postgres
     c.env.redis = redis
     await next()
-  })
-
-  api.get('/healthcheck', c => {
-    return c.text('ok', 200)
   })
 
   const auth = newBetterAuth(
