@@ -19,12 +19,11 @@ export default async function appBuildUp(
   await redisPing(redis)
 
   const api = newHono().basePath('/api')
-  api.use(pinoLogger())
-
   api.get('/hono', c => {
     return c.text('ok', 200)
   })
 
+  api.use(pinoLogger())
   api.use('*', cors(corsOptions))
   api.use('*', async (c, next) => {
     c.env.postgres = postgres
