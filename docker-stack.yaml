@@ -183,8 +183,6 @@ services:
       update_config:
         order: start-first
         failure_action: rollback
-      mode: replicated
-      replicas: 2
     image: nginx:1.27-alpine
     volumes:
       - ./apps/nginx/certs:/etc/nginx/certs:ro

@@ -1,0 +1,4 @@
+certs
+.dockerignore
+Dockerfile
+nginx.conf
