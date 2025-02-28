@@ -47,15 +47,13 @@ RUN pnpm run build
 
 
 
-FROM base AS start
+FROM deps AS start
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 grouphono
 RUN adduser --system --uid 1001 userhono
 
 COPY --from=build --chown=userhono:grouphono /app/build/ ./
-COPY --from=build --chown=userhono:grouphono /app/package.json /app/pnpm-lock.yaml ./
-COPY --from=build --chown=userhono:grouphono /app/node_modules ./node_modules
 COPY --from=build --chown=userhono:grouphono /app/src/lib/postgres/migrations ./src/lib/postgres/migrations
 
 USER userhono
