@@ -114,28 +114,6 @@ services:
       timeout: 5s
       retries: 2
 
-  migrate:
-    deploy:
-      restart_policy:
-        condition: none
-      mode: replicated
-      replicas: 0
-    image: ghcr.io/alexpassalis/image-hono:latest
-    volumes:
-      - ./apps/hono/.env.production:/app/.env.production:ro
-    secrets:
-      - POSTGRES_URL
-      - REDIS_PASSWORD
-      - HONO_BETTER_AUTH_SECRET
-      - GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET
-      - NODEMAILER_AUTH_USER
-      - NODEMAILER_AUTH_PASS
-    environment:
-      HOSTNAME: 0.0.0.0
-      PORT: 4000
-    command: ['pnpm', 'run', 'postgres:migrate']
-
   hono:
     deploy:
       restart_policy:

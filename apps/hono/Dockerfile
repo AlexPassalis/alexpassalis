@@ -12,11 +12,12 @@ RUN apk add --no-cache \
     && ln -sf /usr/bin/python3 /usr/bin/python
 
 
+
 FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm i --frozen-lockfile
+RUN npm install -g pnpm@9.15.4 && pnpm i --frozen-lockfile
 
 
 
@@ -31,7 +32,7 @@ CMD ["pnpm", "run", "dev"]
 
 
 
-FROM deps as test
+FROM deps AS test
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
@@ -40,7 +41,7 @@ CMD ["pnpm", "run", "test"]
 
 
 
-FROM deps as build
+FROM deps AS build
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
@@ -59,5 +60,6 @@ COPY --from=build --chown=userhono:grouphono /app/build/ ./
 COPY --from=build --chown=userhono:grouphono /app/src/lib/postgres/migrations ./src/lib/postgres/migrations
 
 USER userhono
+ENV NODE_ENV=production
 
 CMD ["pnpm", "run", "start"]
