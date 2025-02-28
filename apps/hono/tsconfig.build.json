@@ -6,6 +6,7 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
+  "include": ["./src", "./drizzle.config.ts"],
   "exclude": [
     "./src/test",
     "./src/lib/better-auth/schema.ts",

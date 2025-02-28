@@ -12,8 +12,9 @@ RUN apk add --no-cache \
 
 FROM base AS deps
 WORKDIR /app
-COPY ./package.json ./pnpm-lock.yaml ./
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm i --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+RUN pnpm i --frozen-lockfile
 
 
 
@@ -46,15 +47,17 @@ RUN pnpm run build
 
 
 
-FROM build AS start
+FROM base AS start
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 grouphono
 RUN adduser --system --uid 1001 userhono
 
-COPY --from=build --chown=userhono:grouphono /app/build ./
+COPY --from=build --chown=userhono:grouphono /app/build/ ./
+COPY --from=build --chown=userhono:grouphono /app/package.json /app/pnpm-lock.yaml ./
+COPY --from=build --chown=userhono:grouphono /app/node_modules ./node_modules
+COPY --from=build --chown=userhono:grouphono /app/src/lib/postgres/migrations ./src/lib/postgres/migrations
 
 USER userhono
-ENV NODE_ENV=production
 
-CMD ["node", "server.js"]
+CMD ["pnpm", "run", "start"]
