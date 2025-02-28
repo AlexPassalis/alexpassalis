@@ -10,8 +10,8 @@
     "test:dev": "cross-env NODE_ENV=test vitest --config ./vitest.config.ts",
     "test": "cross-env NODE_ENV=test vitest run --config ./vitest.config.ts",
     "build": "cross-env NODE_ENV=production tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "postgres:migrate": "cross-env POSTGRES_MIGRATING=true drizzle-kit push --config ./drizzle.config.js",
-    "start": "pnpm run postgres:migrate && cross-env NODE_ENV=production node ./server.js"
+    "postgres:migrate": "cross-env NODE_ENV=production POSTGRES_MIGRATING=true drizzle-kit push --config ./drizzle.config.js",
+    "start": "cross-env NODE_ENV=production node ./server.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
