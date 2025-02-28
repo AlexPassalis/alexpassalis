@@ -79,6 +79,30 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
+  pgweb:
+    deploy:
+      restart_policy:
+        condition: any
+      update_config:
+        order: start-first
+        failure_action: rollback
+    image: sosedoff/pgweb
+    secrets:
+      - POSTGRES_URL
+    entrypoint: ['/bin/sh']
+    command:
+      - -c
+      - 'pgweb --url "$$(cat /run/secrets/POSTGRES_URL)?sslmode=disable" --bind 0.0.0.0 --listen 8081'
+    ports:
+      - '8081:8081'
+    healthcheck:
+      start_period: 30s
+      start_interval: 5s
+      test: ['CMD', 'nc', '-vz', '127.0.0.1', '8081']
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
   redis:
     deploy:
       restart_policy:
