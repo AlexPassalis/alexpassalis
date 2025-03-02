@@ -21,7 +21,7 @@ CMD ["pnpm", "run", "dev"]
 
 
 
-FROM deps as build
+FROM deps AS build
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules

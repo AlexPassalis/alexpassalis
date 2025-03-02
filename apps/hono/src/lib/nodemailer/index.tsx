@@ -49,4 +49,4 @@ export async function sendEmailOTP(
   return info
 }
 
-export type EmailInfo = Awaited<ReturnType<typeof sendEmailOTP>>
+export type Info = Awaited<ReturnType<typeof sendEmailOTP>>

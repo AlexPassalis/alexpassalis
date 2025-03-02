@@ -5,11 +5,16 @@ import { postgresBuildUp, postgresTearDown } from '@/lib/postgres/index'
 import appBuildUp from '@/app'
 import { redisBuildUp, redisTeardown } from '@/lib/redis'
 import {
-  EmailInfo,
+  Info,
   newNodemailer,
   Nodemailer,
   nodemailerTransporterBuildUp,
 } from '@/lib/nodemailer/index'
+
+export type EmailInfo = {
+  info: undefined | Info
+  otp: undefined | string
+}
 
 export async function serverBuildUp(
   postgres_url: string,
@@ -41,7 +46,10 @@ export async function serverBuildUp(
     nodemailer_auth_pass
   )
 
-  let emailInfo: undefined | EmailInfo
+  const emailInfo = { info: undefined, otp: undefined } as {
+    info: undefined | Info
+    otp: undefined | string
+  }
   const api = await appBuildUp(
     postgres,
     redis,

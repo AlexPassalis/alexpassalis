@@ -22,6 +22,7 @@ import {
   errorInvalidUsername,
 } from './../../../data/zod/error'
 import { authClient } from '@/lib/better-auth'
+import Link from 'next/link'
 // import { useRouter } from 'next/navigation'
 
 export default function SignUpPage() {
@@ -166,12 +167,12 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                   </div>
                   <div className="text-center text-sm">
                     Already have an account?{' '}
-                    <a
+                    <Link
                       href={ROUTE_LOGIN}
                       className="underline underline-offset-4"
                     >
                       Log in
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </>

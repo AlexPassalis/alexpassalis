@@ -1,4 +1,4 @@
-FROM postgres:17-alpine
+FROM postgres:17-alpine AS base
 # Install only tzdata (for correct UTC handling) and locale support
 RUN apk add --no-cache tzdata musl-locales musl-locales-lang
 # Set timezone to UTC explicitly

@@ -46,9 +46,47 @@ describe('/api/auth', () => {
               name: username,
             },
           })
+          expect(nodemailerTest.getTestMessageUrl(emailInfoTest.info!)).toBe(
+            false
+          )
         },
       }
     )
-    console.log(nodemailerTest.getTestMessageUrl(emailInfoTest!))
+
+    await authClient.emailOtp.sendVerificationOtp(
+      {
+        email: email,
+        type: 'sign-in',
+      },
+      {
+        onSuccess: response => {
+          expect(response.data).toEqual({ success: true })
+          expect(
+            nodemailerTest.getTestMessageUrl(emailInfoTest.info!)
+          ).toBeTypeOf('string')
+          console.log(nodemailerTest.getTestMessageUrl(emailInfoTest.info!))
+          expect(emailInfoTest.otp).toBeTypeOf('string')
+        },
+      }
+    )
+
+    await authClient.signIn.emailOtp(
+      {
+        email: email,
+        otp: emailInfoTest.otp!,
+      },
+      {
+        onSuccess: response => {
+          expect(response.data).toMatchObject({
+            token: expect.any(String),
+            user: {
+              email: email.toLowerCase(),
+              emailVerified: false,
+              name: username,
+            },
+          })
+        },
+      }
+    )
   })
 })

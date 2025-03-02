@@ -1,7 +1,0 @@
-scrape_configs:
-  - job_name: 'fastify'
-    scrape_interval: 30s
-    metrics_path: '/metrics'
-    scheme: http
-    static_configs:
-      - targets: ['fastify-1:4001', 'fastify-2:4002']

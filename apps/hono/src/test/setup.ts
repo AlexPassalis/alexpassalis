@@ -10,7 +10,8 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import Redis from 'ioredis'
 import { sql } from 'drizzle-orm'
 import { Server, serverBuildUp } from '@/server'
-import { EmailInfo, newNodemailer, Nodemailer } from '@/lib/nodemailer'
+import { newNodemailer, Nodemailer } from '@/lib/nodemailer'
+import { EmailInfo } from '@/server'
 import env from '@/env'
 import { HonoInstance } from '@/config/newHono'
 import { account, session, user, verification } from '@/api/auth/auth.schema'
@@ -22,7 +23,7 @@ let redisContainerTest: StartedRedisContainer
 let redisTest: Redis
 
 let nodemailerTest: Nodemailer
-let emailInfoTest: undefined | EmailInfo
+let emailInfoTest: EmailInfo
 
 let apiTest: HonoInstance
 
@@ -83,6 +84,11 @@ async function postgresEmptyCheck() {
   expect((await postgresTest.select().from(verification)).length).toBe(0)
 }
 
+function emailInfoTestReset() {
+  emailInfoTest.info = undefined
+  emailInfoTest.otp = undefined
+}
+
 beforeEach(async () => {
   await postgresTest.execute(sql`
     TRUNCATE TABLE auth.user CASCADE;
@@ -92,6 +98,7 @@ beforeEach(async () => {
   `)
   await postgresEmptyCheck()
   await redisTest.flushall()
+  emailInfoTestReset()
 })
 
 afterAll(async () => {
@@ -105,4 +112,11 @@ afterAll(async () => {
   await redisContainerTest?.stop()
 }, timeout)
 
-export { postgresTest, redisTest, apiTest, nodemailerTest, emailInfoTest }
+export {
+  postgresTest,
+  redisTest,
+  apiTest,
+  nodemailerTest,
+  emailInfoTest,
+  emailInfoTestReset,
+}

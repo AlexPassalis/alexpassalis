@@ -6,12 +6,13 @@ import { pinoLogger } from '@/config/logger'
 import { cors } from 'hono/cors'
 import corsOptions from '@/config/corsOptions'
 import newBetterAuth from '@/lib/better-auth/index'
-import { EmailInfo, Transporter } from '@/lib/nodemailer/index'
+import { Transporter } from '@/lib/nodemailer/index'
+import { EmailInfo } from '@/server'
 
 export default async function appBuildUp(
   postgres: Postgres,
   redis: Redis,
-  emailInfo: undefined | EmailInfo,
+  emailInfo: EmailInfo,
   nodemailer_auth_user: string,
   transporter: Transporter
 ) {

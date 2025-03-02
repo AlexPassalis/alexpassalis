@@ -1,5 +1,4 @@
 *.env.production filter=git-crypt diff=git-crypt
 *.key filter=git-crypt diff=git-crypt
 *.pem filter=git-crypt diff=git-crypt
-apps/redis/redis.conf filter=git-crypt diff=git-crypt
-apps/nginx/nginx.conf filter=git-crypt diff=git-crypt
+*.conf filter=git-crypt diff=git-crypt
