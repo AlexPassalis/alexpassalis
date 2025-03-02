@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { ROUTE_SIGNUP } from '@/data/routes'
+import { ROUTE_SIGNUP, ROUTE_LOGIN, ROUTE_HOME } from '@/data/routes'
 import { typeEmail, typeOTP } from '@/data/zod/type'
 
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef, useEffect, useMemo, useState } from 'react'
 import { cn } from '@/lib/shadcn-ui/index'
 import {
   Card,
@@ -17,25 +17,38 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { errorInvalidEmail } from './../../../data/zod/error'
+import { errorInvalidEmail } from '@/data/zod/error'
 import { authClient } from '@/lib/better-auth'
 import Link from 'next/link'
-// import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Countdown } from '@/components/ui/countdown'
 
 export default function SignUpPage() {
   return <SignUpForm />
 }
 
 function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  // const router = useRouter()
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [, setOnRequest] = useState(false)
-  const [signInEmail, setSignInEmail] = useState(false)
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState<null | string>(searchParams.get('email'))
+  const [countdownStart, setCountdownStart] = useState<null | number>(
+    Number(searchParams.get('countdownStart'))
+  )
+  const otpSent = useMemo(
+    () => !!(email && countdownStart),
+    [email, countdownStart]
+  )
+
+  useEffect(() => {
+    setEmail(searchParams.get('email'))
+    setCountdownStart(Number(searchParams.get('countdownStart')))
+  }, [searchParams])
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
-        {signInEmail ? (
+        {otpSent ? (
           <>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">Email OTP</CardTitle>
@@ -52,7 +65,13 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                         onSubmit={async e => {
                           e.preventDefault()
                           const otpSubmitted = e.currentTarget.otp.value
-                          console.log(otpSubmitted)
+
+                          const { data: emailValidated } =
+                            typeEmail.safeParse(email)
+                          if (!emailValidated) {
+                            console.error(errorInvalidEmail)
+                            return
+                          }
 
                           const { data: otpValidated } =
                             typeOTP.safeParse(otpSubmitted)
@@ -63,7 +82,7 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
 
                           await authClient.signIn.emailOtp(
                             {
-                              email: email,
+                              email: emailValidated,
                               otp: otpValidated,
                             },
                             {
@@ -74,10 +93,9 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                                 setOnRequest(false)
                                 console.error(response)
                               },
-                              onSuccess: response => {
+                              onSuccess: () => {
                                 setOnRequest(false)
-                                console.log(response)
-                                setSignInEmail(true)
+                                router.push(ROUTE_HOME)
                               },
                             }
                           )
@@ -98,6 +116,7 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                             <Button type="submit" className="w-full">
                               Log in
                             </Button>
+                            <Countdown countdownStart={countdownStart!} />
                           </div>
                         </div>
                       </form>
@@ -168,11 +187,14 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                                 setOnRequest(false)
                                 console.error(response)
                               },
-                              onSuccess: response => {
+                              onSuccess: () => {
                                 setOnRequest(false)
-                                console.log(response)
-                                setEmail(emailValidated)
-                                setSignInEmail(true)
+                                router.push(
+                                  `${ROUTE_LOGIN}?email=${emailValidated}&countdownStart=${Math.floor(
+                                    Date.now() / 1000
+                                  )}`,
+                                  { scroll: false }
+                                )
                               },
                             }
                           )

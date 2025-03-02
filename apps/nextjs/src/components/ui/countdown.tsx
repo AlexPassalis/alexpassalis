@@ -6,25 +6,27 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card'
-import { ROUTE_SIGNUP } from '@/data/routes'
+import { ROUTE_LOGIN } from '@/data/routes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export function Countdown({ exp }: { exp: number }) {
+export function Countdown({ countdownStart }: { countdownStart: number }) {
   const router = useRouter()
-  const [secondsLeft, setSecondsLeft] = useState<null | number>(null)
+  const expiresIn = 300
+  const expired = countdownStart + 300
+  const [secondsLeft, setSecondsLeft] = useState<number>(expiresIn)
 
   useEffect(() => {
-    setSecondsLeft(exp - Math.floor(Date.now() / 1000))
+    setSecondsLeft(expired - Math.floor(Date.now() / 1000))
     const countdown = setInterval(() => {
-      setSecondsLeft(exp - Math.floor(Date.now() / 1000))
+      setSecondsLeft(expired - Math.floor(Date.now() / 1000))
     }, 1000)
     return () => clearInterval(countdown)
-  }, [exp])
+  }, [expired])
 
   useEffect(() => {
     if (secondsLeft !== null && secondsLeft <= 0) {
-      router.push(`${ROUTE_SIGNUP}?message=token-expired`)
+      router.push(`${ROUTE_LOGIN}?message=otp-expired`)
     }
   }, [secondsLeft, router])
 
@@ -32,7 +34,7 @@ export function Countdown({ exp }: { exp: number }) {
     <Card>
       <CardHeader>
         <CardDescription className="text-center">
-          The token will be invalidated in
+          The OTP will be invalidated in
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">
