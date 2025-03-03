@@ -25,6 +25,10 @@ export function nodemailerTransporterBuildUp(
       user: nodemailer_auth_user,
       pass: nodemailer_auth_pass,
     },
+    tls: {
+      ciphers: 'SSLv3',
+      rejectUnauthorized: true,
+    },
   })
   return transporter
 }
