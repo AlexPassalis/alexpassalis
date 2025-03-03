@@ -71,6 +71,8 @@ export default function newBetterAuth(
             } catch (e) {
               betterAuthError(errorEmailSending, request, e)
             }
+          } else {
+            betterAuthError(errorEmailSending, request) // this needs to change to another type of error
           }
         },
       }),

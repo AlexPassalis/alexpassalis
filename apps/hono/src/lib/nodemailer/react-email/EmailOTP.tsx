@@ -17,7 +17,7 @@ export default function EmailOTP({ otp }: { otp: string }) {
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>AWS Email Verification</Preview>
+        <Preview>OTP</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}></Section>
