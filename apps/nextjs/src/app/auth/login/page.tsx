@@ -7,13 +7,7 @@ import { Label } from '@/components/ui/label'
 import { ROUTE_SIGNUP, ROUTE_LOGIN, ROUTE_HOME } from '@/data/routes'
 import { typeEmail, typeOTP } from '@/data/zod/type'
 
-import {
-  ComponentPropsWithoutRef,
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { ComponentPropsWithoutRef, useEffect, useMemo, useState } from 'react'
 import { cn } from '@/lib/shadcn-ui/index'
 import {
   Card,
@@ -30,11 +24,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Countdown } from '@/components/ui/countdown'
 
 export default function SignUpPage() {
-  return (
-    <Suspense>
-      <SignUpForm />
-    </Suspense>
-  )
+  return <SignUpForm />
 }
 
 function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
@@ -126,9 +116,7 @@ function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
                             <Button type="submit" className="w-full">
                               Log in
                             </Button>
-                            <Suspense>
-                              <Countdown countdownStart={countdownStart!} />
-                            </Suspense>
+                            <Countdown countdownStart={countdownStart!} />
                           </div>
                         </div>
                       </form>
