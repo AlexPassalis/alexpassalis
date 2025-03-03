@@ -30,7 +30,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Countdown } from '@/components/ui/countdown'
 
 export default function SignUpPage() {
-  return <SignUpForm />
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
+  )
 }
 
 function SignUpForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
