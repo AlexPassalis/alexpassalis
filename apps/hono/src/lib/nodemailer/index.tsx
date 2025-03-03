@@ -26,7 +26,7 @@ export function nodemailerTransporterBuildUp(
       pass: nodemailer_auth_pass,
     },
     tls: {
-      ciphers: 'SSLv3',
+      minVersion: 'TLSv1.2',
       rejectUnauthorized: true,
     },
   })
