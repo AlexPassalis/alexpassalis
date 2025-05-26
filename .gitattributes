@@ -1,4 +1,0 @@
-*.env.production filter=git-crypt diff=git-crypt
-*.key filter=git-crypt diff=git-crypt
-*.pem filter=git-crypt diff=git-crypt
-*.conf filter=git-crypt diff=git-crypt
