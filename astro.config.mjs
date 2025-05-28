@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 
+import cloudflare from '@astrojs/cloudflare'
 import tailwindcss from '@tailwindcss/vite'
 import autoprefixer from 'autoprefixer'
 import icon from 'astro-icon'
@@ -9,6 +10,14 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'never',
   output: 'static',
+  integrations: [icon({ include: { mdi: ['*'] } })],
+  prefetch: true,
+  adapter: cloudflare({
+    imageService: 'compile',
+    platformProxy: {
+      enabled: true,
+    },
+  }),
   vite: {
     plugins: [tailwindcss()],
     css: {
@@ -17,6 +26,4 @@ export default defineConfig({
       },
     },
   },
-  integrations: [icon({ include: { mdi: ['*'] } })],
-  prefetch: true,
 })
