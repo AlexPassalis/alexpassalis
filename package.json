@@ -1,0 +1,38 @@
+{
+  "name": "alexpassalis",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "prepare": "husky",
+    "dev": "astro dev",
+    "lint": "eslint .",
+    "build": "astro build",
+    "preview": "astro build && wrangler pages dev",
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
+    "astro": "^5.8.0",
+    "tailwindcss": "^4.1.7"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.13.2",
+    "@iconify-json/mdi": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^22.15.21",
+    "astro-icon": "^1.1.5",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.27.0",
+    "eslint-plugin-format": "^1.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "postcss": "^8.5.3",
+    "prettier": "3.5.3",
+    "prettier-plugin-astro": "0.14.1",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.16.1"
+  }
+}

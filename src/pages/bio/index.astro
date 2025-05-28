@@ -1,0 +1,81 @@
+---
+import RootLayout from '@/layouts/RootLayout.astro'
+
+import { Image } from 'astro:assets'
+import profile from '@/assets/profile.jpg'
+import { Icon } from 'astro-icon/components'
+---
+
+<RootLayout>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://www.linkedin.com" crossorigin />
+    <link rel="preconnect" href="https://github.com" crossorigin />
+    <link rel="preconnect" href="https://facebook.com" crossorigin />
+    <link rel="preconnect" href="https://instagram.com" crossorigin />
+  </Fragment>
+
+  <main class="flex flex-col w-screen h-screen justify-center items-center">
+    <div
+      class="bg-paper bg-cover bg-center filter brightness-130 w-full max-w-[640px] h-full p-[3vh] border-2 border-black flex flex-col items-center justify-center"
+    >
+      <div
+        class="mb-2 mx-auto aspect-square h-[25vh] max-h-[275px] rounded-full border-2 border-black overflow-hidden"
+      >
+        <Image
+          src={profile}
+          alt="Profile picture of Alex Passalis"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          width={1008}
+          height={1344}
+          class="w-full h-full object-cover object-center transform scale-125"
+        />
+      </div>
+      <h1 class="bold700 text-3xl text-center">Alex Passalis</h1>
+      <h2 class="mb-1 mediumItalic text-xl text-center">software developer</h2>
+      <p class="text-xl">Websites and Automations.</p>
+
+      <section
+        class="mt-[3vh] w-[75%] max-w-[375px] text-white text-2xl flex flex-col gap-[2vh]"
+      >
+        <a
+          data-astro-prefetch
+          href="/"
+          class="p-[1vh] bg-blue-600 bg-noise bg-blend-overlay inline-flex justify-center items-center gap-1 noise-btn"
+        >
+          Website
+          <Icon name="mdi:web" size={35} />
+        </a>
+        <a
+          href="https://www.linkedin.com/in/alex-passalis-92747a367/"
+          class="p-[1vh] bg-blue-600 bg-noise bg-blend-overlay inline-flex justify-center items-center gap-1 noise-btn"
+        >
+          Linkedin
+          <Icon name="mdi:linkedin" size={35} />
+        </a>
+        <a
+          href="https://github.com/AlexPassalis"
+          class="p-[1vh] bg-blue-600 bg-noise bg-blend-overlay inline-flex justify-center items-center gap-1 noise-btn"
+        >
+          GitHub
+          <Icon name="mdi:github" size={35} />
+        </a>
+        <a
+          href="https://www.facebook.com/alexander.passalis/"
+          class="p-[1vh] bg-blue-600 bg-noise bg-blend-overlay inline-flex justify-center items-center gap-1 noise-btn"
+        >
+          Facebook
+          <Icon name="mdi:facebook" size={35} />
+        </a>
+        <a
+          href="https://www.instagram.com/alex_passalis"
+          class="p-[1vh] bg-blue-600 bg-noise bg-blend-overlay inline-flex justify-center items-center gap-1 noise-btn"
+        >
+          Instagram
+          <Icon name="mdi:instagram" size={35} />
+        </a>
+      </section>
+    </div>
+  </main>
+</RootLayout>
