@@ -44,10 +44,8 @@
       active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)]
       active:translate-x-[5px] active:translate-y-[5px]
       bg-blue-600
-      bg-repeat
+      bg-no-repeat
       bg-blend-overlay;
-    background-blend-mode: overlay;
-    -webkit-background-blend-mode: overlay;
   }
 }
 
