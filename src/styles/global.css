@@ -33,11 +33,11 @@
   }
 
   .bg-paper {
-    @apply bg-[url('images/bg-paper.jpg')] bg-repeat;
+    @apply bg-[url('/images/bg-paper.jpg')] bg-repeat;
   }
 
   .bg-noise {
-    @apply bg-[url('images/bg-noise.png')] bg-repeat;
+    @apply bg-[url('/images/bg-noise.png')] bg-repeat;
   }
 
   .noise-btn {
