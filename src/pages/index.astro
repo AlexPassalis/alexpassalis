@@ -1,14 +1,26 @@
 ---
 import RootLayout from '@/layouts/RootLayout.astro'
+
+import { getImage } from 'astro:assets'
+import paper from '@/assets/bg-paper.jpg'
+
+const bgPaper = await getImage({
+  src: paper,
+  width: 690,
+  height: 1000,
+  format: 'webp',
+  quality: 100,
+})
 ---
 
 <RootLayout>
   <main class="flex flex-col w-screen h-screen justify-center items-center">
     <div
-      class="bg-paper bg-cover bg-center filter brightness-125 w-full h-full flex flex-col items-center justify-center"
+      class="w-full h-full flex flex-col items-center justify-center filter brightness-125 bg-cover bg-center"
+      style={`background-image: url(${bgPaper.src}); filter: brightness(1.2);`}
     >
       <h1 class="bold700 text-5xl text-center animate-pulse">
-        Work In Progress ...
+        Work In Progress …
       </h1>
     </div>
   </main>
