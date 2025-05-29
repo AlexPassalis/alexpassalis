@@ -8,7 +8,7 @@ import autoprefixer from 'autoprefixer'
 export default defineConfig({
   site: 'https://alexpassalis.dev',
   base: '/',
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
   output: 'static',
   integrations: [icon({ include: { mdi: ['*'] } })],
   prefetch: true,
