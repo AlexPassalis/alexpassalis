@@ -2,6 +2,7 @@
   "name": "alexpassalis",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.11.0",
   "scripts": {
     "prepare": "husky",
     "lint": "eslint .",
@@ -14,9 +15,9 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.3",
-    "astro": "^5.8.0"
+    "astro": "^5.8.0",
+    "sharp": "^0.34.2"
   },
-  "packageManager": "pnpm@10.11.0",
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
     "@iconify-json/mdi": "^1.2.3",
