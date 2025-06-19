@@ -1,7 +1,5 @@
 # Hi 👋, I'm Alex
 
-### Websites and Automations.
-
 ### Connect with me:
 
 <p align="left">
