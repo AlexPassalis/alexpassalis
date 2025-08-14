@@ -1,0 +1,8 @@
+.venv/
+secrets/
+
+__pycache__/
+migrations/
+
+.nuxt/
+node_modules/
