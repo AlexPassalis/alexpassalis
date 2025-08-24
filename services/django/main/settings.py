@@ -20,16 +20,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-from src.data.env import env
+from main.data.env.env import (
+    DJANGO_SECRET_KEY,
+    DJANGO_DEBUG,
+    DJANGO_ALLOWED_HOSTS,
+    DJANGO_CORS_ALLOWED_ORIGINS,
+    POSTGRES_URL,
+)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.DJANGO_SECRET_KEY
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.DJANGO_DEBUG
+DEBUG = DJANGO_DEBUG
 
-ALLOWED_HOSTS = env.DJANGO_ALLOWED_HOSTS
+ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS
 
+CORS_ALLOWED_ORIGINS = DJANGO_CORS_ALLOWED_ORIGINS
 
 # Application definition
 
@@ -42,12 +49,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
-    "api",
+    "corsheaders",
+    "api.apps.ApiConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -81,7 +91,7 @@ WSGI_APPLICATION = "main.wsgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=env.POSTGRES_URL,
+        default=POSTGRES_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
@@ -97,6 +107,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 8},
+    },
+    {
+        "NAME": "api.validators.MaximumLengthPasswordValidator",
+        "OPTIONS": {"max_length": 64},
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -104,8 +119,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    {
+        "NAME": "api.validators.RegexPasswordValidator",
+    },
 ]
 
+# Changing the default User model to my custom one.
+AUTH_USER_MODEL = "api.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -133,16 +153,20 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "My Blog API",
-    "DESCRIPTION": "Simple CRUD Blog API.",
+    "TITLE": "My blog API",
+    "DESCRIPTION": "Simple CRUD blog API.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "SWAGGER_UI_SETTINGS": {"persistAuthorization": True},
 }

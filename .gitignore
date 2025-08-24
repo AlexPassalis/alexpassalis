@@ -1,8 +1,10 @@
+.mypy_cache/
 .venv/
 secrets/
 
 __pycache__/
 migrations/
 
-.nuxt/
+.next/
 node_modules/
+.pnpm-store/

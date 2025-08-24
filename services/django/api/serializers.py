@@ -1,20 +1,77 @@
+from typing import Type, cast
+from django.contrib.auth.models import AbstractUser
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import Blog, Comment
+from django.contrib.auth import get_user_model, password_validation
+from django.core.exceptions import ValidationError
+from .models import Blog
+
+User = cast(
+    Type[AbstractUser], get_user_model()
+)  # drf-spectacular won't work otherwise.
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "password"]
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = ["first_name", "last_name", "username", "email", "password"]
+        extra_kwargs = {
+            "first_name": {
+                "min_length": 1,  # keep for openapi-zod-client
+                "max_length": 32,
+                "error_messages": {
+                    "blank": "This field may not be blank.",
+                    "max_length": "This first name is too long. It must not contain more than 32 characters.",
+                },
+            },
+            "last_name": {
+                "min_length": 1,  # keep for openapi-zod-client
+                "max_length": 32,
+                "error_messages": {
+                    "blank": "This field may not be blank.",
+                    "max_length": "This last name is too long. It must not contain more than 32 characters.",
+                },
+            },
+            "username": {
+                "min_length": 6,
+                "max_length": 16,
+                "error_messages": {
+                    "blank": "This field may not be blank.",
+                    "min_length": "This username is too short. It must contain at least 6 characters.",
+                    "max_length": "This username is too long. It must not contain more than 16 characters.",
+                },
+            },
+            "password": {
+                "write_only": True,
+                "min_length": 8,
+                "max_length": 64,
+                "error_messages": {
+                    "blank": "This field may not be blank.",
+                    "min_length": "This password is too short. It must contain at least 8 characters.",
+                    "max_length": "This password is too long. It must not contain more than 64 characters.",
+                },
+            },
+        }
+
+    def validate_password(self, value: str) -> str:
+        user = User(username=(getattr(self, "initial_data", {}) or {}).get("username"))
+        try:
+            password_validation.validate_password(value, user=user)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
+        return value
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
 
 
-class BlogSerializer(serializers.ModelSerializer):
+class UserReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username"]
+        read_only_fields = ["id"]
+
+
+class BlogReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = [
@@ -23,15 +80,20 @@ class BlogSerializer(serializers.ModelSerializer):
             "author",
             "title",
             "content",
-            "tags",
             "created_at",
             "last_updated_at",
         ]
-        read_only_fields = ["id", "slug", "created_at", "last_updated_at"]
+        read_only_fields = ["id", "slug", "author", "created_at", "last_updated_at"]
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class BlogWriteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
-        fields = ["id", "user", "content", "created_at", "last_updated_at"]
-        read_only_fields = ["id", "user", "created_at", "last_updated_at"]
+        model = Blog
+        fields = ["title", "content"]
+
+
+# class CommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = ["id", "user", "content", "created_at", "last_updated_at"]
+#         read_only_fields = ["id", "user", "created_at", "last_updated_at"]

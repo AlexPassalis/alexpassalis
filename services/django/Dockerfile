@@ -10,7 +10,7 @@ COPY . .
 
 
 FROM base AS dev
-ENV PYTHON_ENV=developement
+ENV PYTHON_ENV=development
 
 # Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1

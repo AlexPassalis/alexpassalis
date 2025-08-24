@@ -10,4 +10,4 @@ def test_can_connect_to_database():
         db_conn.ensure_connection()
         assert db_conn.is_usable()
     except OperationalError:
-        pytest.fail("Database is not available.")
+        pytest.fail("Testcontainers database is not available.")

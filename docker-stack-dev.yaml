@@ -1,25 +1,27 @@
 networks:
-  network-tracker:
+  network-alexpassalis:
     external: true
 
 volumes:
   postgres:
 
 secrets:
-  TRACKER_POSTGRES_DB:
+  ALEXPASSALIS_DJANGO_SECRET_KEY:
     external: true
-  TRACKER_POSTGRES_USER:
+  ALEXPASSALIS_POSTGRES_DB:
     external: true
-  TRACKER_POSTGRES_PASSWORD:
+  ALEXPASSALIS_POSTGRES_USER:
     external: true
-  TRACKER_POSTGRES_URL:
+  ALEXPASSALIS_POSTGRES_PASSWORD:
+    external: true
+  ALEXPASSALIS_POSTGRES_URL:
     external: true
 
 services:
   dozzle:
     image: amir20/dozzle
     networks:
-      - network-tracker
+      - network-alexpassalis
     environment:
       - DOZZLE_NO_ANALYTICS=true
     volumes:
@@ -28,54 +30,53 @@ services:
       - '8080:8080'
 
   postgres:
-    image: image-tracker-postgres
+    image: image-alexpassalis-postgres
     networks:
-      - network-tracker
+      - network-alexpassalis
     secrets:
-      - TRACKER_POSTGRES_DB
-      - TRACKER_POSTGRES_USER
-      - TRACKER_POSTGRES_PASSWORD
+      - ALEXPASSALIS_POSTGRES_DB
+      - ALEXPASSALIS_POSTGRES_USER
+      - ALEXPASSALIS_POSTGRES_PASSWORD
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB_FILE: /run/secrets/TRACKER_POSTGRES_DB
-      POSTGRES_USER_FILE: /run/secrets/TRACKER_POSTGRES_USER
-      POSTGRES_PASSWORD_FILE: /run/secrets/TRACKER_POSTGRES_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/ALEXPASSALIS_POSTGRES_DB
+      POSTGRES_USER_FILE: /run/secrets/ALEXPASSALIS_POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/ALEXPASSALIS_POSTGRES_PASSWORD
     volumes:
       - postgres:/var/lib/postgresql/data
-    ports:
-      - '5432:5432' ### ONLY IN DEV FOR pgAdmin 4 ###
 
   pgweb:
     image: sosedoff/pgweb
     networks:
-      - network-tracker
+      - network-alexpassalis
     secrets:
-      - TRACKER_POSTGRES_URL
+      - ALEXPASSALIS_POSTGRES_URL
     entrypoint: ['/bin/sh']
     command:
       - -c
-      - 'pgweb --url "$$(cat /run/secrets/TRACKER_POSTGRES_URL)?sslmode=disable" --bind 0.0.0.0 --listen 8081'
+      - 'pgweb --url "$$(cat /run/secrets/ALEXPASSALIS_POSTGRES_URL)?sslmode=disable" --bind 0.0.0.0 --listen 8081'
     ports:
       - '8081:8081'
 
   django:
-    image: image-tracker-django
+    image: image-alexpassalis-django
     networks:
-      - network-tracker
+      - network-alexpassalis
     secrets:
-      - TRACKER_POSTGRES_URL
+      - ALEXPASSALIS_DJANGO_SECRET_KEY
+      - ALEXPASSALIS_POSTGRES_URL
     volumes:
       - ./services/django:/app
     ports:
       - '8000:8000' ### NEEDS FIXING remove when the nginx container comes in
 
-  nuxt:
-    image: image-tracker-nuxt
+  nextjs:
+    image: image-alexpassalis-nextjs
     networks:
-      - network-tracker
+      - network-alexpassalis
     volumes:
-      - ./services/nuxt:/app
+      - ./services/nextjs:/app
       - /app/node_modules
     ports:
       - '3000:3000' ### NEEDS FIXING remove when the nginx container comes in
