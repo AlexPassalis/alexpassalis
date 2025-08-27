@@ -19,7 +19,7 @@ export default function Page() {
             alt="Profile picture of Alex Passalis"
             loading="eager"
             decoding="async"
-            // fetchpriority="high"
+            priority
             width={1008}
             height={1344}
             className="w-full h-full object-cover object-center transform scale-125"
