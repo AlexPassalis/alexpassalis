@@ -11,6 +11,7 @@ export default function Page() {
           fill
           priority
           sizes="(max-width: 640px) 100vw, 640px"
+          quality={100}
           className="object-cover object-center -z-10 pointer-events-none"
         />
         <h1 className="bold700 text-5xl text-center animate-pulse">
