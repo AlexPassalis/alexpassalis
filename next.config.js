@@ -5,7 +5,10 @@
  **/
 const nextConfig = {
   output: 'export',
-  images: { unoptimized: true },
+  images: { loader: 'custom', loaderFile: './src/imageLoader.ts' },
+  eslint: {
+    dirs: ['src'],
+  },
 }
 
 module.exports = nextConfig
