@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "prepare": "husky",
     "lint": "next lint",
     "dev": "next",
     "build": "next build",
@@ -17,13 +18,20 @@
     "@iconify/icons-mdi": "^1.2.48",
     "@iconify/react": "^6.0.0",
     "@iconify/types": "^2.0.0",
+    "@next/eslint-plugin-next": "^15.5.2",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.34.0",
+    "eslint-config-next": "^15.5.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.12",
     "typescript": "^5.9.2"
-  }
+  },
+  "packageManager": "pnpm@10.14.0"
 }
