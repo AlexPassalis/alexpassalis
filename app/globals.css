@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Ancizar Serif';
+  src: url('/AncizarSerif-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ancizar Serif';
+  src: url('/AncizarSerif-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --color-blue: #0000ff;
+}
+
+@layer components {
+  .bold700 {
+    @apply font-serif font-bold;
+    font-style: normal;
+  }
+
+  .mediumItalic {
+    @apply font-serif font-medium;
+    font-style: italic;
+  }
+
+  .bg-noise {
+    @apply bg-[url('/bg-noise.png')] bg-repeat;
+  }
+
+  .noise-btn {
+    @apply border-2
+      border-black
+      shadow-[5px_5px_0_0_rgba(0,0,0,1)]
+      transition-all duration-50
+      active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)]
+      active:translate-x-[5px] active:translate-y-[5px]
+      bg-blue-600
+      bg-no-repeat
+      bg-blend-overlay;
+  }
+}
+
+body {
+  font-family: 'Ancizar Serif', serif;
+  font-weight: 500;
+  font-style: normal;
+  background-color: white;
+  color: black;
+}
