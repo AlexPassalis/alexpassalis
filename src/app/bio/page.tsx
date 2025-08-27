@@ -1,27 +1,34 @@
 import Image from 'next/image'
+
 import { Icon } from '@iconify/react'
+import mdiLinkedin from '@iconify/icons-mdi/linkedin'
+import mdiGithub from '@iconify/icons-mdi/github'
+import mdiFacebook from '@iconify/icons-mdi/facebook'
+import mdiInstagram from '@iconify/icons-mdi/instagram'
 
 export default function Page() {
   return (
     <main className="flex flex-col w-screen h-screen justify-center items-center">
-      <div
-        className="w-full max-w-[640px] h-full p-[3vh] border-2 border-black flex flex-col items-center justify-center"
-        style={{
-          backgroundImage: "url('/bg-paper.jpg')",
-          filter: 'brightness(1.2)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      <div className="relative w-full max-w-[640px] h-full p-[3vh] border-2 border-black flex flex-col items-center justify-center">
+        <Image
+          src="/bg-paper.jpg"
+          alt=""
+          aria-hidden
+          fill
+          priority
+          sizes="(max-width: 640px) 100vw, 640px"
+          className="object-cover object-center -z-10 pointer-events-none"
+        />
         <div className="mb-2 mx-auto aspect-square h-[25vh] max-h-[275px] rounded-full border-2 border-black overflow-hidden">
           <Image
             src="/profile.jpg"
-            alt="Profile picture of Alex Passalis"
+            alt="Profile picture of Alex Passalis."
             loading="eager"
             decoding="async"
             priority
             width={1008}
             height={1344}
+            quality={100}
             className="w-full h-full object-cover object-center transform scale-125"
           />
         </div>
@@ -37,28 +44,28 @@ export default function Page() {
             className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
           >
             Linkedin
-            <Icon icon="mdi:linkedin" width={35} height={35} />
+            <Icon icon={mdiLinkedin} width={35} height={35} />
           </a>
           <a
             href="https://github.com/AlexPassalis"
             className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
           >
             GitHub
-            <Icon icon="mdi:github" width={35} height={35} />
+            <Icon icon={mdiGithub} width={35} height={35} />
           </a>
           <a
             href="https://www.facebook.com/alexander.passalis/"
             className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
           >
             Facebook
-            <Icon icon="mdi:facebook" width={35} height={35} />
+            <Icon icon={mdiFacebook} width={35} height={35} />
           </a>
           <a
             href="https://www.instagram.com/alex_passalis"
             className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
           >
             Instagram
-            <Icon icon="mdi:instagram" width={35} height={35} />
+            <Icon icon={mdiInstagram} width={35} height={35} />
           </a>
         </section>
       </div>
