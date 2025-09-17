@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import mdiLinkedin from '@iconify/icons-mdi/linkedin'
 import mdiGithub from '@iconify/icons-mdi/github'
 import mdiFacebook from '@iconify/icons-mdi/facebook'
-import mdiInstagram from '@iconify/icons-mdi/instagram'
+import mdiEmail from '@iconify/icons-mdi/email'
 
 export default function Page() {
   return (
@@ -41,6 +41,13 @@ export default function Page() {
 
         <section className="mt-[3vh] w-[75%] max-w-[375px] text-white text-2xl flex flex-col gap-[2vh]">
           <a
+            href="mailto:alexpassalis9@gmail.com"
+            className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
+          >
+            Email
+            <Icon icon={mdiEmail} width={35} height={35} />
+          </a>
+          <a
             href="https://www.linkedin.com/in/alex-passalis"
             className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
           >
@@ -60,13 +67,6 @@ export default function Page() {
           >
             Facebook
             <Icon icon={mdiFacebook} width={35} height={35} />
-          </a>
-          <a
-            href="https://www.instagram.com/alex_passalis"
-            className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
-          >
-            Instagram
-            <Icon icon={mdiInstagram} width={35} height={35} />
           </a>
         </section>
       </div>

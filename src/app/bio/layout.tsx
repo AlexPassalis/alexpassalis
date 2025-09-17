@@ -18,11 +18,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         href="https://www.facebook.com"
         crossOrigin="anonymous"
       />
-      <link
-        rel="preconnect"
-        href="https://www.instagram.com"
-        crossOrigin="anonymous"
-      />
       {children}
     </>
   )
