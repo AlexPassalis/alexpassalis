@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { Icon } from '@iconify/react'
 import mdiLinkedin from '@iconify/icons-mdi/linkedin'
 import mdiGithub from '@iconify/icons-mdi/github'
-import mdiFacebook from '@iconify/icons-mdi/facebook'
 import mdiEmail from '@iconify/icons-mdi/email'
 
 export default function Page() {
@@ -35,9 +34,9 @@ export default function Page() {
         </div>
         <h1 className="bold700 text-3xl text-center">Alex Passalis</h1>
         <h2 className="mb-1 mediumItalic text-xl text-center">
-          software developer
+          Fullstack Software Developer
         </h2>
-        <p className="text-xl">Websites and Automations.</p>
+        <p className="text-xl">Web apps & APIs</p>
 
         <section className="mt-[3vh] w-[75%] max-w-[375px] text-white text-2xl flex flex-col gap-[2vh]">
           <a
@@ -60,13 +59,6 @@ export default function Page() {
           >
             GitHub
             <Icon icon={mdiGithub} width={35} height={35} />
-          </a>
-          <a
-            href="https://www.facebook.com/alexander.passalis/"
-            className="noise-btn bg-noise p-[1vh] inline-flex justify-center items-center gap-1"
-          >
-            Facebook
-            <Icon icon={mdiFacebook} width={35} height={35} />
           </a>
         </section>
       </div>
