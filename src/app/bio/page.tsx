@@ -34,7 +34,7 @@ export default function Page() {
         </div>
         <h1 className="bold700 text-3xl text-center">Alex Passalis</h1>
         <h2 className="mb-1 mediumItalic text-xl text-center">
-          Fullstack Software Developer
+          Fullstack Software Engineer
         </h2>
         <p className="text-xl">Web apps & APIs</p>
 
